@@ -1,7 +1,7 @@
+import { NotaProvisional, Nota } from './types/index';
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid';
-import { NotaProvisional, Nota } from './types/index';
 
 type NotaState = {
     notas: Nota[]
