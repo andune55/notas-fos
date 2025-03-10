@@ -12,6 +12,7 @@
     "dpnet": "npm run build && ntl deploy --prod"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.0.12",
     "prop-types": "^15.8.1",

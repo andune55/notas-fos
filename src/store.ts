@@ -8,8 +8,10 @@ type NotaState = {
     addNota: (nota: NotaProvisional) => void
     removeNota: (id:Nota['id']) => void
     editingId: Nota['id']
-    getNotaById: (id:Nota['id']) => void
-
+    editNotaById: (id:Nota['id']) => void
+    modal: boolean
+    openModal: () => void 
+    closeModal: () => void 
 }
 
 const createNotaConId = (nota: NotaProvisional ) : Nota => {
@@ -34,16 +36,27 @@ export const useNotaStore = create<NotaState>()(
             removeNota: (id:Nota['id']) => {    
                 set((state) => ({             
                     ...state.notas,
-                    notas: state.notas.filter( nota => nota.id !== id)          
-                }))
+                    notas: state.notas.filter( nota => nota.id !== id)                               
+                }))                
             },
             editingId: '',  
-            getNotaById: (id:Nota['id']) => {    
-                set((state) => ({             
+            editNotaById: (id:Nota['id']) => {    
+                set(() => ({             
                     editingId: id
                     //modal: true     
+                }))                
+            },
+            modal: false,
+            openModal: () => {
+                set(() => ({
+                    modal: true
                 }))
-            }, 
+            },
+            closeModal: () => {
+                set(() => ({
+                    modal: false
+                }))
+            }
         }
         ),
         {

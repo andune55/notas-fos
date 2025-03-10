@@ -3,6 +3,7 @@ import { useState, useEffect, FormEvent} from "react"
 import { useNotaStore } from "../store"
 import { useVoiceToText } from "react-speakup"
 import NotasList from "./NotasList"
+
 import { toast, Bounce, ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 
@@ -73,6 +74,7 @@ const VoiceToText = () => {
                 theme="light"
                 transition={Bounce}
             />
+            
 
             <div className="text-center flex flex-col w-[95%] max-sm:w-full mx-auto bg-white shadow-lg rounded-lg p-5 max-sm:p-1.25">
                 <h1 className='font-bold text-xl text-center mb-1.25 bg-[#116D8B] text-white flex justify-center items-center p-1.25'>
@@ -131,6 +133,8 @@ const VoiceToText = () => {
             </div> 
 
             <NotasList/> 
+
+            
 
         </div>
     )

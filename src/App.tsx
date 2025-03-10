@@ -1,6 +1,6 @@
 
 import VoiceToText from "./components/VoiceToText"
-
+// import NotasModal from "./components/NotasModal"
 
 function App() {
    
@@ -8,9 +8,8 @@ function App() {
   return (
     <>
       {/* <TextToVoice/> */}
-      <VoiceToText/>
-      
-     
+      <VoiceToText/>      
+      {/* <NotasModal/> */}
 
     </>
   )

@@ -1,8 +1,9 @@
 import { LeadingActions, SwipeableList, SwipeableListItem, SwipeAction, TrailingActions} from 'react-swipeable-list'
 import { Nota } from '../types/index'
 import { useNotaStore } from '../store'
-
 import "react-swipeable-list/dist/styles.css"
+import { toast } from 'react-toastify';
+
 
 type NotaDetailsProps = {
     nota : Nota
@@ -10,14 +11,26 @@ type NotaDetailsProps = {
 
 export default function NotaDetail({nota} : NotaDetailsProps) {
 
-    const { removeNota , getNotaById } = useNotaStore()
+    const { removeNota, editNotaById, modal } = useNotaStore()
 
     //const categoryInfo = useMemo(() => categories.filter(cat => cat.id === expense.category)[0],[expense])
+
+    //let notaEditar = useMemo(() => notas.filter(nota => nota.id === editingId)[0],[editingId])
+
+    const handleEditar = (e:Nota['id']) =>{
+        editNotaById(e)
+        toast.info(e)
+    }
+    const handleEliminar = (e1:Nota['id'],e2:Nota['txtNota']) =>{
+        removeNota(e1)    
+        toast.error('Nota eliminada:' + e2)
+    }
+    
 
     const leadingActions = () => (
         <LeadingActions>
             {/* <SwipeAction onClick={() => dispatch({type: "get-expense-by-id", payload: {id: expense.id}})}> */}
-            <SwipeAction onClick={() => getNotaById(nota.id)}>
+            <SwipeAction onClick={() => handleEditar(nota.id)}>
                 Actualizar
             </SwipeAction>
         </LeadingActions>
@@ -25,7 +38,7 @@ export default function NotaDetail({nota} : NotaDetailsProps) {
     const trailingActions = () => (
         <TrailingActions>
             <SwipeAction 
-                onClick={() => removeNota(nota.id)}
+                onClick={() => handleEliminar(nota.id,nota.txtNota)}
                 destructive = {true}
             >
                 Eliminar
