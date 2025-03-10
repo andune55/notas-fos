@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "https://andune55.github.io/notas-fos/",
   plugins: [
     tailwindcss(),
     react()
