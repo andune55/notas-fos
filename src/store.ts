@@ -5,9 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 type NotaState = {
     notas: Nota[]
-    notaActual: Nota['id']
     addNota: (nota: NotaProvisional) => void
     removeNota: (id:Nota['id']) => void
+    editingId: Nota['id']
+    getNotaById: (id:Nota['id']) => void
+
 }
 
 const createNotaConId = (nota: NotaProvisional ) : Nota => {
@@ -35,8 +37,13 @@ export const useNotaStore = create<NotaState>()(
                     notas: state.notas.filter( nota => nota.id !== id)          
                 }))
             },
-
-            notaActual: '' 
+            editingId: '',  
+            getNotaById: (id:Nota['id']) => {    
+                set((state) => ({             
+                    editingId: id
+                    //modal: true     
+                }))
+            }, 
         }
         ),
         {

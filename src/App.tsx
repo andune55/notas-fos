@@ -10,7 +10,8 @@ function App() {
       {/* <TextToVoice/> */}
       <VoiceToText/>
       
-         
+     
+
     </>
   )
 }

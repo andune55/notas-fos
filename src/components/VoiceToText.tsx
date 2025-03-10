@@ -2,6 +2,7 @@ import { NotaProvisional } from "../types"
 import { useState, useEffect, FormEvent} from "react"
 import { useNotaStore } from "../store"
 import { useVoiceToText } from "react-speakup"
+import NotasList from "./NotasList"
 import { toast, Bounce, ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 
@@ -128,6 +129,9 @@ const VoiceToText = () => {
                 </div>           
             
             </div> 
+
+            <NotasList/> 
+
         </div>
     )
 }
