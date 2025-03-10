@@ -19,8 +19,8 @@ const createNotaConId = (nota: NotaProvisional ) : Nota => {
 
 export const useNotaStore = create<NotaState>()(
     devtools(
-        //persist( (set) => ({
-        (set) => ({
+        persist( (set) => ({
+        //(set) => ({
             notas: [],                                  
             addNota: (nota: NotaProvisional) => {    
                 const notaConId = createNotaConId(nota)                     
@@ -38,12 +38,11 @@ export const useNotaStore = create<NotaState>()(
 
             notaActual: '' 
         }
-    // )        
-    //     ,
-    //     {
-    //      name: 'nota-storage'
-    //      // storage: createJSONStorage (() => sessionStorage)
-    //     }  
-    )
+        ),
+        {
+            name: 'nota-storage'
+            // storage: createJSONStorage (() => sessionStorage)
+        }  
+        )
     )
 ) 
