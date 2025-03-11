@@ -1,4 +1,3 @@
-//ExpenseModal.tsx
 import { Fragment, useEffect } from 'react'
 // import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import { useForm } from 'react-hook-form'
@@ -10,16 +9,6 @@ export default function NotasModal() {
 
   const { notas, modal, closeModal, editingId, updateNote } = useNotaStore()
   const { register, handleSubmit, setValue, reset} = useForm<Nota>()
-
-  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-
-  //   //actualizar nota
-  //   if(editingId){
-  //     //editNotaById({id: editingId, ...expense})
-  //     console.log('nota a editar '+ editingId)
-  //   }
-  // }
 
   useEffect(() => {
     if(editingId) {
@@ -82,22 +71,15 @@ export default function NotasModal() {
               >
                 <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 
-                {/* <div className="flex justify-end">
-                  <button 
-                    className="false shrink-0 max-w-[40px] bg-[#116D8B] max-sm:w-full ml-1.25 py-2 px-3.5 text-white uppercase font-bold rounded-3xl disabled:opacity-25" 
-                    onClick={closeModal}
-                    >X</button>
-                </div>                 */}
-
                 <form className="space-y-5" onSubmit={handleSubmit(registerNota)}>
                   <div className="flex justify-between">
                     <legend
-                      className="uppercase text-center text-lg text-gray-500 border-b-4 border-[#116D8B] py-2"
+                      className="grow uppercase text-center text-lg text-gray-500 border-b-4 border-[#116D8B] py-2"
                     // >{editingId ? 'Guardar Cambios' : 'Nuevo gasto'}</legend>
                     >Editando nota {editingId}
                     </legend>
                     <button 
-                      className="false shrink-0 max-w-[40px] bg-[#116D8B] max-sm:w-full ml-1.25 py-2 px-3.5 text-white uppercase font-bold rounded-3xl disabled:opacity-25" 
+                      className="cursor-pointer grow-0 shrink-0 size-10 bg-[#116D8B] max-sm:w-full ml-1.25 py-2 px-3.5 text-white uppercase font-bold rounded-3xl disabled:opacity-25" 
                       onClick={closeModal}
                       >X</button>
                   </div>
@@ -128,7 +110,6 @@ export default function NotasModal() {
                   />
 
                 </form>
-
 
                 </Dialog.Panel>
               </Transition.Child>

@@ -75,9 +75,10 @@ const VoiceToText = () => {
                 transition={Bounce}
             />            
 
-            <div className="text-center flex flex-col w-[95%] max-sm:w-full mx-auto bg-white shadow-lg rounded-lg p-5 max-sm:p-1.25">
-                <h1 className='font-bold text-xl text-center mb-1.25 bg-[#116D8B] text-white flex justify-center items-center p-1.25'>
-                    App notas FOS
+            <div className="text-center flex flex-col w-[90%] max-w-[1440px] max-sm:w-full mx-auto bg-white shadow-lg rounded-lg p-5 max-sm:p-1.25">
+                <h1 className='font-bold text-xl text-center mb-1.25 bg-[#301934;] text-white flex justify-center items-center p-1.25'>
+                {/* <h1 className='font-bold text-xl text-center mb-1.25 flex justify-center items-center p-1.25'> */}
+                    2Dús
                     <img className="ml-2.5" src="./ico-notas1.png" width="50" height="50" alt="icono notas" />
                 </h1>
                 
@@ -104,10 +105,11 @@ const VoiceToText = () => {
                             <input
                                 type="text"
                                 className="w-full bg-white border border-gray-200 p-2"
-                                placeholder="Aquí va el texto de la nota"                        
+                                placeholder="Previsualiza la nota grabada"                        
                                 name="nota"
                                 value={transcript}  
-                                onChange={()=>{}}                      
+                                onChange={()=>{}}  
+                                readOnly                    
                             />
                             
                             <button 
@@ -131,9 +133,7 @@ const VoiceToText = () => {
             
             </div> 
 
-            <NotasList/> 
-
-            
+            <NotasList/>             
 
         </div>
     )

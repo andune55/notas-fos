@@ -55,23 +55,22 @@ export default function NotaDetail({nota} : NotaDetailsProps) {
             trailingActions = {trailingActions()}
         >
 
-            <div className="bg-white shadow-lg p-3 w-full border-b border-gray-200 flex gap-2 items-start">
-                <div>
-                    <img 
-                        // src={`./icono_${categoryInfo.icon}.svg`} 
-                        src="./ico-notas1.png"
-                        alt="icono gasto"
-                        className='w-10 shrink-0'
-                        width="10"
-                        height="10"
-                    />
+            <div className="contenedor-notas shadow-lg p-3 w-full flex gap-2 items-center">
+                
+                <img 
+                    // src={`./icono_${categoryInfo.icon}.svg`} 
+                    src="./ico-notas1.png"
+                    alt="icono gasto"
+                    className='w-9 shrink-0 ml-1.25'
+                    width="10"
+                    height="10"
+                />
+                
+                <div className='flex-1'>
+                    <p className="text-[16px] leading-4 text-slate-700">{nota.txtNota}</p>
+                    {/* <p className='text-[12px] text-neutral-400'>{`${nota.id} `}</p> */}                    
                 </div>
 
-                <div className='flex-1'>
-                    <p className="text-sm font-bold uppercase text-slate-500">{`${nota.id} `}</p>
-                    <p>{nota.txtNota}</p>
-                    {/* <p className="text-slate-600 text-sm">{ formatDate( expense.date!.toString() ) }</p> */}
-                </div>
 
                 {/* <AmountDisplay
                     amount={expense.amount}
