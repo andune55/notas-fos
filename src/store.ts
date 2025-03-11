@@ -9,6 +9,7 @@ type NotaState = {
     removeNota: (id:Nota['id']) => void
     editingId: Nota['id']
     editNotaById: (id:Nota['id']) => void
+    updateNote: (data: NotaProvisional) => void
     modal: boolean
     openModal: () => void 
     closeModal: () => void 
@@ -42,9 +43,18 @@ export const useNotaStore = create<NotaState>()(
             editingId: '',  
             editNotaById: (id:Nota['id']) => {    
                 set(() => ({             
-                    editingId: id
-                    //modal: true     
+                    editingId: id,
+                    modal: true     
                 }))                
+            },
+            updateNote: (data:NotaProvisional) => {
+                set((state) => ({
+                    notas: state.notas.map( nota => nota.id === state.editingId ? {id: state.editingId, ...data } : nota),
+                    activeId: '',
+                    modal: false
+                }))
+                
+  //   toast.info('Nota actualizada')
             },
             modal: false,
             openModal: () => {

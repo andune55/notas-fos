@@ -6,10 +6,10 @@
   @apply text-white text-lg uppercase font-bold;
 }
 .swipeable-list-item__leading-actions{
-  @apply bg-blue-600;
+  @apply bg-[#116D8B];
 }
 .swipeable-list-item__trailing-actions {
-  @apply bg-pink-600;
+  @apply bg-red-600;
 }
 .swipeable-list .swipe-action {
   @apply flex justify-center items-center

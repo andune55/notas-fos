@@ -19,8 +19,9 @@ export default function NotaDetail({nota} : NotaDetailsProps) {
 
     const handleEditar = (e:Nota['id']) =>{
         editNotaById(e)
-        toast.info(e)
+        //toast.info(e)
     }
+    
     const handleEliminar = (e1:Nota['id'],e2:Nota['txtNota']) =>{
         removeNota(e1)    
         toast.error('Nota eliminada:' + e2)

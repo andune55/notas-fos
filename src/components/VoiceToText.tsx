@@ -33,7 +33,7 @@ const VoiceToText = () => {
         })
     }
 
-    //En cuanto cambie el value del transcript si es !=0 sacarlo en consola y guardarlo en el state local
+    //En cuanto cambie el value del transcript si es !=0 guardarlo en el state local
     useEffect(() => {
         if(transcript!='') {
             //console.log(transcript)
@@ -73,8 +73,7 @@ const VoiceToText = () => {
                 pauseOnHover
                 theme="light"
                 transition={Bounce}
-            />
-            
+            />            
 
             <div className="text-center flex flex-col w-[95%] max-sm:w-full mx-auto bg-white shadow-lg rounded-lg p-5 max-sm:p-1.25">
                 <h1 className='font-bold text-xl text-center mb-1.25 bg-[#116D8B] text-white flex justify-center items-center p-1.25'>

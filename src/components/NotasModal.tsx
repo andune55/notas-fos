@@ -1,17 +1,52 @@
 //ExpenseModal.tsx
-import { Fragment } from 'react'
-import { PlusCircleIcon } from '@heroicons/react/24/solid'
+import { Fragment, useEffect } from 'react'
+// import { PlusCircleIcon } from '@heroicons/react/24/solid'
+import { useForm } from 'react-hook-form'
 import { Dialog, Transition } from '@headlessui/react'
 import { useNotaStore } from '../store'
-import EditNotaForm from './EditNotaForm'
+import { Nota, NotaProvisional } from '../types'
+import { toast } from 'react-toastify'
 
 export default function NotasModal() {
 
-  const { modal, openModal, closeModal } = useNotaStore()
+  const { notas, modal, closeModal, editingId, updateNote } = useNotaStore()
+  const { register, handleSubmit, setValue, reset} = useForm<Nota>()
+
+  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault()
+
+  //   //actualizar nota
+  //   if(editingId){
+  //     //editNotaById({id: editingId, ...expense})
+  //     console.log('nota a editar '+ editingId)
+  //   }
+  // }
+
+  useEffect(() => {
+    if(editingId) {
+        const activeNote = notas.filter( nota => nota.id === editingId)[0]
+        //console.log(activeNote.txtNota)
+        setValue('txtNota', activeNote.txtNota)        
+    }
+  }, [editingId])
+
+  const registerNota = (data: NotaProvisional) => {
+    if(editingId) {
+      updateNote(data)
+    }
+    reset()
+  }
+
+  // const handleActualiza = () => {
+  //event?.preventDefault
+  //   handleSubmit(registerNota)
+  //   closeModal()
+  //   toast.info('Nota actualizada')
+  // }
 
   return (
     <>
-      <div className="fixed right-5 bottom-5 flex items-center justify-center">
+      {/* <div className="fixed right-5 bottom-5 flex items-center justify-center">
         <button
           type="button"
           onClick={() => openModal()}
@@ -19,7 +54,7 @@ export default function NotasModal() {
         >
           <PlusCircleIcon className='w-16 h-16 text-blue-600 rounded-full' />
         </button>
-      </div>
+      </div> */}
 
       <Transition appear show={modal} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => closeModal() }>
@@ -48,7 +83,40 @@ export default function NotasModal() {
               >
                 <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
 
-                  <EditNotaForm />
+
+                <form className="space-y-5" onSubmit={handleSubmit(registerNota)}>
+                  <legend
+                    className="uppercase text-center text-2xl font-black border-b-4 border-[#116D8B] py-2"
+                  // >{editingId ? 'Guardar Cambios' : 'Nuevo gasto'}</legend>
+                  >Editando nota {editingId}</legend>
+
+                  {/* {error && <ErrorMessage>{error}</ErrorMessage>} */}
+
+                  <div className="flex flex-col gap-2">
+                    <label 
+                      htmlFor="expenseName"
+                      className="text-xl">
+                      Texto de la nota:
+                    </label>
+                    <input
+                      id="txtNota"
+                      type="text"
+                      className="w-full bg-white border border-gray-200 p-2"
+                      placeholder="Aquí va el texto de la nota" 
+                      {...register('txtNota', {
+                        required: 'El texto es necesario'
+                      })}                                         
+                    />
+                  </div> 
+              
+                  <input 
+                    type="submit" 
+                    className="bg-[#116D8B] cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg"
+                    value='Guardar cambios'
+                  />
+
+                </form>
+
 
                 </Dialog.Panel>
               </Transition.Child>
