@@ -14,3 +14,97 @@
 .swipeable-list .swipe-action {
   @apply flex justify-center items-center
 }
+
+.loading-circle {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  box-shadow: -0.3rem -0.3rem 3rem rgba(255, 255, 255, 0.4), -0.3rem -0.3rem 0.3rem rgba(255, 255, 255, 0.4), 0.3rem 0.3rem 0.3rem rgba(25, 25, 25, 0.4), 0.3rem 0.3rem 0.3rem rgba(25, 25, 25, 0) inset;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  font-weight: 100;
+  transition: 0.3s box-shadow;
+  box-sizing: border-box;
+  padding: 0.5rem;
+}
+
+.loading-circle:active {
+  box-shadow: 0rem -0.3rem 3rem rgba(255, 255, 255, 0.4),
+    -0rem -0.3rem 0.3rem rgba(255, 255, 255, 0.4),
+    0rem 0.3rem 0.3rem rgba(255, 255, 255, 0.4),
+    0rem 0.3rem 0.3rem rgba(25, 25, 25, 0.4) inset;
+  transition: 0.3s all;
+}
+
+.inner-loading {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border-radius: 27%;
+  box-sizing: border-box;
+  border: 0.18rem dotted #008ef4;
+  border-color: #888;
+  will-change: border-color, filter, transform;
+  border-color: #008ef4;
+  transition: 0.3s all;
+  border-style: dashed;
+
+  animation: 15s loadingAnim infinite linear;
+}
+
+.loading-circle:active .inner-loading {
+  border-color: #008ef4;
+  filter: hue-rotate(-50deg) !important;
+  transition: 0.3s all;
+}
+
+/* using ::after was taking more cpu */
+.after {
+  width: 100%;
+  height: 100%;
+  background-color: #e3e3e4;
+  border-radius: 61%;
+  box-shadow: -0.3rem -0.3rem 3rem rgba(255, 255, 255, 0.4),
+    -0.3rem -0.3rem 0.3rem rgba(255, 255, 255, 0.4),
+    0.3rem 0.3rem 0.3rem rgba(25, 25, 25, 0.4),
+    0.3rem 0.3rem 0.3rem rgba(25, 25, 25, 0) inset;
+  /* That one is just for removing the inner circle's movement */
+  -webkit-animation: 15s loadingAnim infinite reverse linear;
+  animation: 15s loadingAnim infinite reverse linear;
+  will-change: border-color, filter, transform;
+  transition: 0.5s box-shadow;
+  filter: none;
+  transform: rotate(0deg);
+}
+
+.after:active {
+  box-shadow: 0rem -0.3rem 3rem rgba(255, 255, 255, 0.4),
+    -0rem -0.3rem 0.3rem rgba(255, 255, 255, 0.4),
+    0rem 0.3rem 0.3rem rgba(255, 255, 255, 0.4),
+    0rem 0.3rem 0.3rem rgba(25, 25, 25, 0.4) inset;
+}
+
+@keyframes loadingAnim {
+  50% {
+    filter: hue-rotate(360deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes loadingAnim {
+  50% {
+    filter: hue-rotate(360deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

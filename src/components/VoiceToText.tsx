@@ -77,8 +77,15 @@ const VoiceToText = () => {
 
             <div className="text-center flex flex-col w-[95%] max-sm:w-full mx-auto bg-white shadow-lg rounded-lg p-5 max-sm:p-1.25">
                 <h1 className='font-bold text-xl text-center mb-1.25 bg-[#116D8B] text-white flex justify-center items-center p-1.25'>
-                    App notas FOS
-                    <img className="ml-2.5" src="./ico-notas1.png" width="50" height="50" alt="icono notas" />
+                    
+                    {/* <img className="ml-2.5" src="./ico-notas1.png" width="50" height="50" alt="icono notas" /> */}
+                    <div className="loading-circle">
+                        <div className="inner-loading">
+                            <div className="after"></div>
+                        </div>
+	                </div>
+
+                    <div className="ml-2.5">App notas FOS</div>
                 </h1>
                 
             

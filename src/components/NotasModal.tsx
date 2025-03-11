@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form'
 import { Dialog, Transition } from '@headlessui/react'
 import { useNotaStore } from '../store'
 import { Nota, NotaProvisional } from '../types'
-import { toast } from 'react-toastify'
 
 export default function NotasModal() {
 
