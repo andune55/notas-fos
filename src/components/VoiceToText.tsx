@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css"
   
 const VoiceToText = () => {
     //props de la librería
-    const { startListening, transcript, reset } = useVoiceToText({lang:'es', continuous: false})
+    const { startListening, transcript, reset } = useVoiceToText({lang:'es-ES', continuous: false})
     
     //state local
     const [nota, setNota] = useState<NotaProvisional>({
