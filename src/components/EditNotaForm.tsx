@@ -1,5 +1,6 @@
-import { useState, useEffect, ChangeEvent, FormEvent, useMemo } from "react"
-import { Nota } from "../types"
+// import { useState, useEffect, ChangeEvent, FormEvent, useMemo } from "react"
+import { FormEvent} from "react"
+// import { Nota } from "../types"
 import { useNotaStore } from '../store';
 
 

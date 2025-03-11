@@ -11,7 +11,7 @@ type NotaDetailsProps = {
 
 export default function NotaDetail({nota} : NotaDetailsProps) {
 
-    const { removeNota, editNotaById, modal } = useNotaStore()
+    const { removeNota, editNotaById } = useNotaStore()
 
     //const categoryInfo = useMemo(() => categories.filter(cat => cat.id === expense.category)[0],[expense])
 
