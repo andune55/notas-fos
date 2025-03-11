@@ -50,7 +50,7 @@ export const useNotaStore = create<NotaState>()(
             updateNote: (data:NotaProvisional) => {
                 set((state) => ({
                     notas: state.notas.map( nota => nota.id === state.editingId ? {id: state.editingId, ...data } : nota),
-                    activeId: '',
+                    editingId: '',
                     modal: false
                 }))
                 
