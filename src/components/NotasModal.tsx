@@ -73,13 +73,14 @@ export default function NotasModal() {
                 
                 <form className="space-y-5" onSubmit={handleSubmit(registerNota)}>
                   <div className="flex justify-between">
-                    <legend
-                      className="grow uppercase text-center text-lg text-gray-500 border-b-4 border-[#116D8B] py-2"
-                    // >{editingId ? 'Guardar Cambios' : 'Nuevo gasto'}</legend>
-                    >Editando nota {editingId}
-                    </legend>
+                    
+                    <label 
+                      htmlFor="expenseName"
+                      className="text-xl">
+                      Cambiar texto de la nota:
+                    </label>
                     <button 
-                      className="cursor-pointer grow-0 shrink-0 size-10 bg-[#116D8B] max-sm:w-full ml-1.25 py-2 px-3.5 text-white uppercase font-bold rounded-3xl disabled:opacity-25" 
+                      className="cursor-pointer grow-0 shrink-0 size-8 bg-[#116D8B] ml-1.25 py-1 px-1 text-white uppercase font-bold rounded-3xl disabled:opacity-25" 
                       onClick={closeModal}
                       >X</button>
                   </div>
@@ -87,12 +88,17 @@ export default function NotasModal() {
                   {/* {error && <ErrorMessage>{error}</ErrorMessage>} */}
 
                   <div className="flex flex-col gap-2">
-                    <label 
-                      htmlFor="expenseName"
-                      className="text-xl">
-                      Texto de la nota:
-                    </label>
-                    <input
+                    
+                    <textarea 
+                      id="txtNota"                      
+                      className="w-full bg-white border border-gray-200 p-2 min-h-[90px]"
+                      placeholder="Aquí va el texto de la nota" 
+                      {...register('txtNota', {
+                        required: 'El texto es necesario'
+                      })}
+                    />
+                   
+                    {/* <input
                       id="txtNota"
                       type="text"
                       className="w-full bg-white border border-gray-200 p-2"
@@ -100,7 +106,7 @@ export default function NotasModal() {
                       {...register('txtNota', {
                         required: 'El texto es necesario'
                       })}                                         
-                    />
+                    /> */}
                   </div> 
               
                   <input 
@@ -108,7 +114,11 @@ export default function NotasModal() {
                     className="bg-[#116D8B] cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg"
                     value='Guardar cambios'
                   />
-
+                  <legend
+                      className="grow uppercase text-center text-sm text-gray-500 border-t-3 border-[#116D8B]"
+                    // >{editingId ? 'Guardar Cambios' : 'Nuevo gasto'}</legend>
+                    >Editando nota {editingId}
+                    </legend>
                 </form>
 
                 </Dialog.Panel>
