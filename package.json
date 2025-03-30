@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "dpgh": "npm run build && gh-pages -d dist",
-    "dpnet": "npm run build && ntl deploy --prod"
+    "dpnet": "npm run build && ntl deploy --prod",
+    "dpall": "npm run build && gh-pages -d dist && ntl deploy --prod"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
