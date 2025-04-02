@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 type NotaState = {
     notas: Nota[]
-    cambiarOrdenNotas: (notas: Nota) => void
+    cambiarOrdenNotas: (notas: Nota[]) => void
     addNota: (nota: NotaProvisional) => void
     removeNota: (id:Nota['id']) => void
     editingId: Nota['id']
@@ -30,12 +30,18 @@ export const useNotaStore = create<NotaState>()(
         persist( (set) => ({
         //(set) => ({
             notas: [],   
-            cambiarOrdenNotas: (notas:Nota) => {                     
-                set((state) => ({
-                    notas: [...state.notas,notas]
-                    //modal: false             
+            cambiarOrdenNotas: (notas: Nota[]) => {                     
+                set(() => ({
+                    notas: notas          
                 }))
-            },                                         
+            }, 
+            /*addNotaTxt: (nota: NotaProvisional) => {    
+                //const notaConId = createNotaConId(nota)                     
+                set(() => ({
+                    modal: true  
+                    //notas: [...state.notas,notaConId]                               
+                }))
+            },       */                                 
             addNota: (nota: NotaProvisional) => {    
                 const notaConId = createNotaConId(nota)                     
                 set((state) => ({

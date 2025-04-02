@@ -18,7 +18,7 @@ const VoiceToText = () => {
     })
 
     //fcn de mi store para añadir la nota
-    const { addNota } = useNotaStore()
+    const { addNota, openModal } = useNotaStore()
 
     //fcn lanzada desde el boton grabar nota para poner a cero transcript y empezar a escuchar
     const handleGrabar = () =>{
@@ -85,13 +85,26 @@ const VoiceToText = () => {
             
                 <div className="flex max-sm:flex-col align-middle justify-start">
                     <button 
-                        className="cursor-pointer bg-amber-600 max-sm:w-full mt-3 py-2 px-6 text-white uppercase font-bold rounded-lg shrink-0" 
+                        className="cursor-pointer bg-amber-600 max-sm:w-full mt-3 py-2 pl-5 pr-6 text-white uppercase font-bold rounded-lg shrink-0" 
                         onClick={handleGrabar}
+                        aria-label="Botón para grabar nota de voz"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="inline size-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="inline size-6 mr-1">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
                         </svg>
                         Grabar nota
+                    </button>
+                    <button 
+                        className="cursor-pointer bg-blue-800 max-sm:w-full ml-3 mt-3 max-sm:ml-0 py-2 px-6 text-white uppercase font-bold rounded-lg shrink-0" 
+                        onClick={openModal}
+                        aria-label="botón para añadir nota nueva escribiendo"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="inline size-6 mr-1.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                        </svg>
+
+
+                        txt nota
                     </button>
                     {/* <button 
                         className="cursor-pointer bg-amber-600 max-sm:w-full mt-3 ml-3 py-2 px-4 text-white uppercase font-bold rounded-lg shrink-0" 
@@ -105,7 +118,7 @@ const VoiceToText = () => {
                             <input
                                 type="text"
                                 className="w-full bg-white border border-gray-200 p-2"
-                                placeholder="Previsualiza la nota grabada"                        
+                                placeholder="Previsualiza la nota de voz antes de guardar"                        
                                 name="nota"
                                 value={transcript}  
                                 onChange={()=>{}}  
@@ -117,14 +130,16 @@ const VoiceToText = () => {
                                 className={`${transcript!='' && `cursor-pointer`} ml-2.5 disabled:opacity-25 shrink-0`}
                                 type="submit"
                                 disabled={transcript===''}
+                                aria-label="Guardar nota de voz"
                             >
-                                <img src="./ico-guardar.png" width="40" height="40" className="mx-auto" alt="icono notas" />
+                                <img src="./ico-guardar.png" width="40" height="40" className="mx-auto" alt="icono guardar nota de voz" />
                             </button>
 
                             <button 
                                 className={`${transcript!='' && `cursor-pointer`} shrink-0 max-w-[40px] bg-red-600 max-sm:w-full ml-1.25 py-2 px-3.5 text-white uppercase font-bold rounded-3xl disabled:opacity-25`}
                                 onClick={handleBorrar}
                                 disabled={transcript===''}
+                                aria-label="borrar nota de voz"
                             >
                                 X
                             </button>
@@ -134,7 +149,9 @@ const VoiceToText = () => {
             
             </div> 
 
-            <NotasList/>             
+            <NotasList
+                // reset={reset}
+            />             
 
         </div>
     )

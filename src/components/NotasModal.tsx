@@ -5,9 +5,12 @@ import { Dialog, Transition } from '@headlessui/react'
 import { useNotaStore } from '../store'
 import { Nota, NotaProvisional } from '../types'
 
+import { toast, Bounce, ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
+
 export default function NotasModal() {
 
-  const { notas, modal, closeModal, editingId, updateNote } = useNotaStore()
+  const { notas, modal, closeModal, addNota, editingId, updateNote } = useNotaStore()
   const { register, handleSubmit, setValue, reset} = useForm<Nota>()
 
   useEffect(() => {
@@ -21,6 +24,10 @@ export default function NotasModal() {
   const registerNota = (data: NotaProvisional) => {
     if(editingId) {
       updateNote(data)
+    }else{
+      addNota(data)
+      toast.success('Nota añadida correctamente')       
+      closeModal()
     }
     reset()
   }
@@ -77,7 +84,7 @@ export default function NotasModal() {
                     <label 
                       htmlFor="expenseName"
                       className="text-xl">
-                      Cambiar texto de la nota:
+                      {editingId ? 'Cambiar texto de la nota:' : 'Nueva nota'}
                     </label>
                     <button 
                       className="cursor-pointer grow-0 shrink-0 size-8 bg-[#116D8B] ml-1.25 py-1 px-1 text-white uppercase font-bold rounded-3xl disabled:opacity-25" 
@@ -87,11 +94,11 @@ export default function NotasModal() {
 
                   {/* {error && <ErrorMessage>{error}</ErrorMessage>} */}
 
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 border-t-3 border-[#116D8B]">
                     
                     <textarea 
                       id="txtNota"                      
-                      className="w-full bg-white border border-gray-200 p-2 min-h-[90px]"
+                      className="w-full bg-white border border-gray-200 p-2 min-h-[90px] max-sm:min-h-[150px]"
                       placeholder="Aquí va el texto de la nota" 
                       {...register('txtNota', {
                         required: 'El texto es necesario'
@@ -111,14 +118,15 @@ export default function NotasModal() {
               
                   <input 
                     type="submit" 
-                    className="bg-[#116D8B] cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg"
-                    value='Guardar cambios'
+                    className="bg-[#116D8B] cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg mb-5"
+                    value={editingId ? 'Guardar Cambios' : 'Añadir nueva nota'}
                   />
-                  <legend
-                      className="grow uppercase text-center text-sm text-gray-500 border-t-3 border-[#116D8B]"
+                  {/* <legend
+                      className="grow uppercase text-center text-sm text-gray-500"
                     // >{editingId ? 'Guardar Cambios' : 'Nuevo gasto'}</legend>
-                    >Editando nota {editingId}
-                    </legend>
+                    >{editingId ? `Editando nota ${editingId}` : 'Añadiendo nueva nota'}
+                      
+                    </legend> */}
                 </form>
 
                 </Dialog.Panel>
