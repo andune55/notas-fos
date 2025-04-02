@@ -1,5 +1,4 @@
 import { Fragment, useEffect } from 'react'
-// import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import { useForm } from 'react-hook-form'
 import { Dialog, Transition } from '@headlessui/react'
 import { useNotaStore } from '../store'
@@ -32,25 +31,8 @@ export default function NotasModal() {
     reset()
   }
 
-  // const handleActualiza = () => {
-  //event?.preventDefault
-  //   handleSubmit(registerNota)
-  //   closeModal()
-  //   toast.info('Nota actualizada')
-  // }
-
   return (
     <>
-      {/* <div className="fixed right-5 bottom-5 flex items-center justify-center">
-        <button
-          type="button"
-          onClick={() => openModal()}
-          className='cursor-pointer'
-        >
-          <PlusCircleIcon className='w-16 h-16 text-blue-600 rounded-full' />
-        </button>
-      </div> */}
-
       <Transition appear show={modal} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => closeModal() }>
           <Transition.Child
@@ -94,8 +76,7 @@ export default function NotasModal() {
 
                   {/* {error && <ErrorMessage>{error}</ErrorMessage>} */}
 
-                  <div className="flex flex-col gap-2 border-t-3 border-[#116D8B]">
-                    
+                  <div className="flex flex-col gap-2 border-t-3 border-[#116D8B]">                    
                     <textarea 
                       id="txtNota"                      
                       className="w-full bg-white border border-gray-200 p-2 min-h-[90px] max-sm:min-h-[150px]"
@@ -103,17 +84,7 @@ export default function NotasModal() {
                       {...register('txtNota', {
                         required: 'El texto es necesario'
                       })}
-                    />
-                   
-                    {/* <input
-                      id="txtNota"
-                      type="text"
-                      className="w-full bg-white border border-gray-200 p-2"
-                      placeholder="Aquí va el texto de la nota" 
-                      {...register('txtNota', {
-                        required: 'El texto es necesario'
-                      })}                                         
-                    /> */}
+                    /> 
                   </div> 
               
                   <input 
@@ -121,12 +92,6 @@ export default function NotasModal() {
                     className="bg-[#116D8B] cursor-pointer w-full p-2 text-white uppercase font-bold rounded-lg mb-5"
                     value={editingId ? 'Guardar Cambios' : 'Añadir nueva nota'}
                   />
-                  {/* <legend
-                      className="grow uppercase text-center text-sm text-gray-500"
-                    // >{editingId ? 'Guardar Cambios' : 'Nuevo gasto'}</legend>
-                    >{editingId ? `Editando nota ${editingId}` : 'Añadiendo nueva nota'}
-                      
-                    </legend> */}
                 </form>
 
                 </Dialog.Panel>

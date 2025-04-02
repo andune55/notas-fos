@@ -3,11 +3,9 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid'
 
-
-
 type NotaState = {
     notas: Nota[]
-    cambiarOrdenNotas: (notas: Nota[]) => void
+    cambiarOrdenNotas: (notasnuevas: Nota[]) => void
     addNota: (nota: NotaProvisional) => void
     removeNota: (id:Nota['id']) => void
     editingId: Nota['id']
@@ -30,23 +28,16 @@ export const useNotaStore = create<NotaState>()(
         persist( (set) => ({
         //(set) => ({
             notas: [],   
-            cambiarOrdenNotas: (notas: Nota[]) => {                     
-                set(() => ({
-                    notas: notas          
+            cambiarOrdenNotas: (notasnuevas: Nota[]) => {                     
+                set((state) => ({
+                    ...state.notas,
+                    notas: notasnuevas          
                 }))
-            }, 
-            /*addNotaTxt: (nota: NotaProvisional) => {    
-                //const notaConId = createNotaConId(nota)                     
-                set(() => ({
-                    modal: true  
-                    //notas: [...state.notas,notaConId]                               
-                }))
-            },       */                                 
+            },                                           
             addNota: (nota: NotaProvisional) => {    
                 const notaConId = createNotaConId(nota)                     
                 set((state) => ({
                     notas: [...state.notas,notaConId]
-                    //modal: false             
                 }))
             },
             removeNota: (id:Nota['id']) => {    
@@ -68,8 +59,7 @@ export const useNotaStore = create<NotaState>()(
                     editingId: '',
                     modal: false
                 }))
-                
-  //   toast.info('Nota actualizada')
+                //toast.info('Nota actualizada')
             },
             modal: false,
             openModal: () => {

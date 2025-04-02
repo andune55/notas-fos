@@ -6,7 +6,6 @@ import NotasList from "./NotasList"
 
 import { toast, Bounce, ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
-
   
 const VoiceToText = () => {
     //props de la librería
@@ -77,11 +76,9 @@ const VoiceToText = () => {
 
             <div className="text-center flex flex-col w-[90%] max-w-[1440px] max-sm:w-full mx-auto bg-white shadow-lg rounded-lg p-5 max-sm:p-1.25">
                 <h1 className='font-bold text-xl text-center mb-1.25 bg-[#301934;] text-white flex justify-center items-center p-1.25'>
-                {/* <h1 className='font-bold text-xl text-center mb-1.25 flex justify-center items-center p-1.25'> */}
                     2Dús
                     <img className="ml-2.5" src="./ico-notas1.png" width="50" height="50" alt="icono notas" />
-                </h1>
-                
+                </h1>                
             
                 <div className="flex max-sm:flex-col align-middle justify-start">
                     <button 
@@ -99,11 +96,9 @@ const VoiceToText = () => {
                         onClick={openModal}
                         aria-label="botón para añadir nota nueva escribiendo"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="inline size-6 mr-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="inline size-6 mr-1.5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                         </svg>
-
-
                         txt nota
                     </button>
                     {/* <button 
@@ -145,8 +140,7 @@ const VoiceToText = () => {
                             </button>
                         </form>
                     </div>
-                </div>           
-            
+                </div>  
             </div> 
 
             <NotasList

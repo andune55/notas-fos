@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import NotaDetail from "./NotaDetail"
 import { useNotaStore } from '../store'
 import { closestCorners, DndContext } from '@dnd-kit/core'
@@ -7,20 +7,19 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 
 export default function NotasList() {
 
-    const { notas } = useNotaStore()    
+    const { notas, cambiarOrdenNotas } = useNotaStore()    
     // const { notas, cambiarOrdenNotas } = useNotaStore()    
     const isEmpty = useMemo(() => notas.length === 0, [notas])
     
     //nuevo state local introducido para esto del orden
     const [posicionNotas,setPosicionNotas] = useState(notas)    
     
-    //esto es para que cada vez que cambie notas (porque hemos grabado una) actualice el state posicionNotas 
+    //Cada vez que cambie notas (porque hemos grabado una o añadido con txt) actualice el state local posicionNotas 
     // que es el que utilizo para mapear abajo NotaDetail.tsx
-    useMemo(() => setPosicionNotas(notas), [notas])
-    useMemo(() => setPosicionNotas(posicionNotas), [notas])
+    useEffect(() => setPosicionNotas(notas), [notas])
 
-    //intento cambiar el state global de mi store con mi fcn del store "cambiarOrdenNotas" cada vez que cambie el state local
-    //useEffect(() => cambiarOrdenNotas(notas), [posicionNotas])
+    //Cada vez que cambie 'posicionNotas' uso nueva función del store 'cambiarOrdenNotas' para cambiar el state notas con el nuevo orden indicado en 'posicionNotas'
+    useEffect(() => cambiarOrdenNotas(posicionNotas), [posicionNotas])
     
     //fcn para obtener, en el handleDragEnd, la posición de la nota que arrastro (y las over)
     const getNotePosition = (id: string) => notas.findIndex(notas => notas.id === id) 
@@ -36,6 +35,7 @@ export default function NotasList() {
                 const newPos = getNotePosition(over.id)    
                 console.log(newPos)           
                 console.log(posicionNotas)                
+                console.log(notas)                
                 return arrayMove(posicionNotas, originalPos, newPos)                
                 //cambiarOrdenNotas(posicionNotas)
             })
@@ -53,17 +53,15 @@ export default function NotasList() {
                 
                 {/* <DndContext collisionDetection={closestCorners}> */}
                 <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
-                    <SortableContext items={notas} strategy={verticalListSortingStrategy}>
-                        
-                        {/* {posicionNotas.map( nota => ( */}
-                        {notas.map( nota => (
+                    <SortableContext items={notas} strategy={verticalListSortingStrategy}>                        
+                          {/* {notas.map( nota => ( */}
+                        {posicionNotas.map( nota => (                      
                             <NotaDetail
                                 key = {nota.id}
                                 nota = {nota}
                                 id = {nota.id}
                             />
                         ))}
-
                     </SortableContext>
                 </DndContext>                
             </>
