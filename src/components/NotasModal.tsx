@@ -5,7 +5,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { useNotaStore } from '../store'
 import { Nota, NotaProvisional } from '../types'
 
-import { toast, Bounce, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 
 export default function NotasModal() {

@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react"
+import { useMemo, useState } from "react"
 import NotaDetail from "./NotaDetail"
 import { useNotaStore } from '../store'
 import { closestCorners, DndContext } from '@dnd-kit/core'
@@ -7,7 +7,7 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 
 export default function NotasList() {
 
-    const { notas, cambiarOrdenNotas } = useNotaStore()    
+    const { notas } = useNotaStore()    
     // const { notas, cambiarOrdenNotas } = useNotaStore()    
     const isEmpty = useMemo(() => notas.length === 0, [notas])
     
