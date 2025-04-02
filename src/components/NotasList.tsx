@@ -3,7 +3,6 @@ import NotaDetail from "./NotaDetail"
 import { useNotaStore } from '../store'
 import { closestCorners, DndContext } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-//import { Nota } from "../types"
 
 export default function NotasList() {
 
@@ -31,19 +30,14 @@ export default function NotasList() {
         else{
             setPosicionNotas( (posicionNotas) => {                
                 const originalPos = getNotePosition(active.id)    
-                console.log(originalPos)       
+                //console.log(originalPos)       
                 const newPos = getNotePosition(over.id)    
-                console.log(newPos)           
-                console.log(posicionNotas)                
-                console.log(notas)                
+                //console.log(newPos)           
+                //console.log(posicionNotas)                
+                //console.log(notas)                
                 return arrayMove(posicionNotas, originalPos, newPos)                
-                //cambiarOrdenNotas(posicionNotas)
             })
-            //cambiarOrdenNotas(notas)
-        }
-
-        // setPosicionNotas(posicionNotas)
-        // setPosicionNotas(notas)        
+        }   
     }
 
     return (
