@@ -1,10 +1,13 @@
-import { NotaProvisional, Nota } from './types/index';
+import { NotaProvisional, Nota } from './types/index'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
+
+
 
 type NotaState = {
     notas: Nota[]
+    cambiarOrdenNotas: (notas: Nota) => void
     addNota: (nota: NotaProvisional) => void
     removeNota: (id:Nota['id']) => void
     editingId: Nota['id']
@@ -26,7 +29,13 @@ export const useNotaStore = create<NotaState>()(
     devtools(
         persist( (set) => ({
         //(set) => ({
-            notas: [],                                  
+            notas: [],   
+            cambiarOrdenNotas: (notas:Nota) => {                     
+                set((state) => ({
+                    notas: [...state.notas,notas]
+                    //modal: false             
+                }))
+            },                                         
             addNota: (nota: NotaProvisional) => {    
                 const notaConId = createNotaConId(nota)                     
                 set((state) => ({

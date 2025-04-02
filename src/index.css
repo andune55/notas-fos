@@ -39,3 +39,8 @@ h1{
     0px 0px 20px #b393d3;
   
 }
+
+.zona-movible{
+  margin:10px;
+  border: solid 1px black;
+}

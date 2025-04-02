@@ -109,7 +109,8 @@ const VoiceToText = () => {
                                 name="nota"
                                 value={transcript}  
                                 onChange={()=>{}}  
-                                readOnly                    
+                                readOnly
+                                // onFocus={()=>{}}                    
                             />
                             
                             <button 
