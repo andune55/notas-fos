@@ -56,3 +56,8 @@ h1{
 .zona-movible{
   cursor: pointer;
 } 
+
+.contenedor-notas p::first-letter,
+input[name='nota'] {
+  text-transform: capitalize;
+}
