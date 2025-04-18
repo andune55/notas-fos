@@ -41,7 +41,7 @@ export default function NotasList() {
     }
 
     return (
-        <div className="w-[90%] max-w-[1440px] max-sm:w-full mx-auto py-5 mt-5">           
+        <div className="z-4 w-[90%] max-w-[1440px] max-sm:w-full mx-auto py-5 mt-0">           
             <>
                 <p className="mb-3.5 text-gray-600 text-xl font-bold text-center">{isEmpty ? 'Graba alguna nota' : 'Listado de notas'}</p>                
                 
