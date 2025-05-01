@@ -3,6 +3,7 @@ import NotaDetail from "./NotaDetail"
 import { useNotaStore } from '../store'
 import { closestCorners, DndContext } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { formatDate } from "../helpers" 
 
 export default function NotasList() {
 
@@ -40,10 +41,32 @@ export default function NotasList() {
         }   
     }
 
+
+    const fecha = new Date()
+    let fechaFormateada = formatDate(fecha)
+
+    const guardarLista = () => {
+        //https://spin.atomicobject.com/create-export-react-frontend/
+        //const fileData = JSON.stringify(notas);
+        
+        const textoNotas = notas.map((nota)=>(
+            `${nota.txtNota}\n`
+        ))
+        const exportado = `${fechaFormateada}: \n${textoNotas.join('')}`
+
+        const blob = new Blob([exportado], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.download = "notas.txt";
+        link.href = url;
+        link.click();
+      }      
+      
+
     return (
         <div className="z-4 w-[90%] max-w-[1440px] max-sm:w-full mx-auto py-5 mt-0">           
             <>
-                <p className="mb-3.5 text-gray-600 text-xl font-bold text-center">{isEmpty ? 'Graba alguna nota' : 'Listado de notas'}</p>                
+                <p className="mb-3.5 text-gray-600 text-xl font-bold text-center">{isEmpty ? 'Graba alguna nota' : 'Listado de notas'} - <button id="link-descarga" className="underline" onClick={guardarLista}>Guardar Lista</button></p>                
                 
                 {/* <DndContext collisionDetection={closestCorners}> */}
                 <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
