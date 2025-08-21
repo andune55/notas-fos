@@ -75,7 +75,6 @@ const VoiceToText = () => {
             />            
 
             <header className="z-5 sticky top-0 text-center flex flex-col w-[90%] max-w-[1440px] max-sm:w-full mx-auto bg-white shadow-lg rounded-lg p-5 max-sm:p-1.25">
-
                 
                 <h1 className='font-bold text-xl text-center mb-1.25 bg-[#301934;] text-white flex justify-center items-center p-1.25 cursor'>
                     <p>2Dús</p>

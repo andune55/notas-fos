@@ -8,7 +8,7 @@ import { formatDate } from "../helpers"
 export default function NotasList() {
 
     const { notas, cambiarOrdenNotas } = useNotaStore()    
-    // const { notas, cambiarOrdenNotas } = useNotaStore()    
+   
     const isEmpty = useMemo(() => notas.length === 0, [notas])
     
     //nuevo state local introducido para esto del orden

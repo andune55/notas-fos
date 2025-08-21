@@ -11,10 +11,12 @@ type NotaState = {
     editingId: Nota['id']
     editNotaById: (id:Nota['id']) => void
     updateNote: (data: NotaProvisional) => void
+    tacharById: (p:React.ChangeEvent<HTMLParagraphElement>) => void
     modal: boolean
     openModal: () => void 
     closeModal: () => void 
 }
+
 
 const createNotaConId = (nota: NotaProvisional ) : Nota => {
     return {
@@ -60,6 +62,20 @@ export const useNotaStore = create<NotaState>()(
                     modal: false
                 }))
                 //toast.info('Nota actualizada')
+            },           
+            tacharById: (p: React.ChangeEvent<HTMLParagraphElement>) => {
+                console.log(p)
+                
+                p.target.style.textDecoration =
+                p.target.style.textDecoration === "line-through" ? "" : "line-through";
+              
+
+                // const el = document.getElementsByClassName("contenedor-notas")
+                // console.log(el)
+                // if (el) {
+                //     el.style.display = el.style.display === 'none' ? 'block' : 'none';                                   
+                // }
+
             },
             modal: false,
             openModal: () => {
