@@ -3,97 +3,129 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { v4 as uuidv4 } from 'uuid'
 
+type NotasPorLista = {
+    [nombreLista: string]: Nota[]
+}
+
 type NotaState = {
-    notas: Nota[]
+    listas: NotasPorLista
+    listaActiva: string
+    cambiarListaActiva: (nombre: string) => void
+    crearLista: (nombre: string) => void
+    eliminarLista: (nombre: string) => void
+    importarLista: (nombre: string, notas: Nota[]) => void
+
     cambiarOrdenNotas: (notasnuevas: Nota[]) => void
     addNota: (nota: NotaProvisional) => void
     removeNota: (id:Nota['id']) => void
     editingId: Nota['id']
     editNotaById: (id:Nota['id']) => void
     updateNote: (data: NotaProvisional) => void
-    tacharById: (p:React.ChangeEvent<HTMLParagraphElement>) => void
     modal: boolean
     openModal: () => void 
     closeModal: () => void 
 }
 
-
-const createNotaConId = (nota: NotaProvisional ) : Nota => {
-    return {
-        ...nota,
-        id: uuidv4()
-    }
-}
+const createNotaConId = (nota: NotaProvisional ) : Nota => ({
+    ...nota,
+    id: uuidv4()
+})
 
 export const useNotaStore = create<NotaState>()(
     devtools(
-        persist( (set) => ({
-        //(set) => ({
-            notas: [],   
-            cambiarOrdenNotas: (notasnuevas: Nota[]) => {                     
+        persist( (set, get) => ({
+            listas: { "Mi lista": [] },
+            listaActiva: "Mi lista",
+
+            cambiarListaActiva: (nombre) => {
+                set({ listaActiva: nombre })
+            },
+            crearLista: (nombre) => {
                 set((state) => ({
-                    ...state.notas,
-                    notas: notasnuevas          
-                }))
-            },                                           
-            addNota: (nota: NotaProvisional) => {    
-                const notaConId = createNotaConId(nota)                     
-                set((state) => ({
-                    notas: [...state.notas,notaConId]
+                    listas: {
+                        ...state.listas,
+                        [nombre]: []
+                    },
+                    listaActiva: nombre
                 }))
             },
-            removeNota: (id:Nota['id']) => {    
-                set((state) => ({             
-                    ...state.notas,
-                    notas: state.notas.filter( nota => nota.id !== id)                               
-                }))                
+            eliminarLista: (nombre) => {
+                set((state) => {
+                    const nuevasListas = { ...state.listas }
+                    delete nuevasListas[nombre]
+                    // Si eliminas la activa, haz activa otra cualquiera
+                    let nuevaActiva = state.listaActiva
+                    if (nombre === state.listaActiva) {
+                        nuevaActiva = Object.keys(nuevasListas)[0] || ""
+                    }
+                    return {
+                        listas: nuevasListas,
+                        listaActiva: nuevaActiva
+                    }
+                })
+            },
+            importarLista: (nombre, notas) => {
+                set((state) => ({
+                    listas: {
+                        ...state.listas,
+                        [nombre]: notas
+                    },
+                    listaActiva: nombre
+                }))
+            },
+            cambiarOrdenNotas: (notasnuevas: Nota[]) => {
+                set((state) => ({
+                    listas: {
+                        ...state.listas,
+                        [state.listaActiva]: notasnuevas
+                    }
+                }))
+            },
+            addNota: (nota: NotaProvisional) => {
+                const notaConId = createNotaConId(nota)
+                set((state) => ({
+                    listas: {
+                        ...state.listas,
+                        [state.listaActiva]: [
+                            ...(state.listas[state.listaActiva] || []),
+                            notaConId
+                        ]
+                    }
+                }))
+            },
+            removeNota: (id) => {
+                set((state) => ({
+                    listas: {
+                        ...state.listas,
+                        [state.listaActiva]: state.listas[state.listaActiva].filter(nota => nota.id !== id)
+                    }
+                }))
             },
             editingId: '',  
-            editNotaById: (id:Nota['id']) => {    
+            editNotaById: (id) => {    
                 set(() => ({             
                     editingId: id,
                     modal: true     
                 }))                
             },
-            updateNote: (data:NotaProvisional) => {
+            updateNote: (data) => {
                 set((state) => ({
-                    notas: state.notas.map( nota => nota.id === state.editingId ? {id: state.editingId, ...data } : nota),
+                    listas: {
+                        ...state.listas,
+                        [state.listaActiva]: state.listas[state.listaActiva].map(nota =>
+                            nota.id === state.editingId ? { id: state.editingId, ...data } : nota
+                        )
+                    },
                     editingId: '',
                     modal: false
                 }))
-                //toast.info('Nota actualizada')
             },           
-            tacharById: (p: React.ChangeEvent<HTMLParagraphElement>) => {
-                console.log(p)
-                
-                p.target.style.textDecoration =
-                p.target.style.textDecoration === "line-through" ? "" : "line-through";
-              
-
-                // const el = document.getElementsByClassName("contenedor-notas")
-                // console.log(el)
-                // if (el) {
-                //     el.style.display = el.style.display === 'none' ? 'block' : 'none';                                   
-                // }
-
-            },
             modal: false,
-            openModal: () => {
-                set(() => ({
-                    modal: true
-                }))
-            },
-            closeModal: () => {
-                set(() => ({
-                    modal: false
-                }))
-            }
-        }
-        ),
+            openModal: () => { set({ modal: true }) },
+            closeModal: () => { set({ modal: false, editingId: '' }) }
+        }),
         {
-            name: 'nota-storage'
-            // storage: createJSONStorage (() => sessionStorage)
-        }  
-        )
+            name: 'nota-multilista-storage'
+        })
     )
-) 
+)
