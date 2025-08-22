@@ -3,7 +3,7 @@ import NotaDetail from "./NotaDetail"
 import { useNotaStore } from '../store'
 import { closestCorners, DndContext } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { formatDate } from "../helpers" 
+// import { formatDate } from "../helpers" 
 
 export default function NotasList() {
     const { listas, listaActiva, cambiarOrdenNotas } = useNotaStore()

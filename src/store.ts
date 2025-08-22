@@ -33,7 +33,7 @@ const createNotaConId = (nota: NotaProvisional ) : Nota => ({
 
 export const useNotaStore = create<NotaState>()(
     devtools(
-        persist( (set, get) => ({
+        persist( (set) => ({
             listas: { "Mi lista": [] },
             listaActiva: "Mi lista",
 
