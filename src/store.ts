@@ -24,6 +24,12 @@ type NotaState = {
     modal: boolean
     openModal: () => void 
     closeModal: () => void 
+
+    borrarId: string | null
+    openDeleteModal: (id: string) => void
+    closeDeleteModal: () => void
+
+    mostrarNavegacion: () => void   
 }
 
 const createNotaConId = (nota: NotaProvisional ) : Nota => ({
@@ -122,7 +128,14 @@ export const useNotaStore = create<NotaState>()(
             },           
             modal: false,
             openModal: () => { set({ modal: true }) },
-            closeModal: () => { set({ modal: false, editingId: '' }) }
+            closeModal: () => { set({ modal: false, editingId: '' }) },
+            borrarId: null,
+            openDeleteModal: (id) => set({ borrarId: id }),
+            closeDeleteModal: () => set({ borrarId: null }),
+            mostrarNavegacion : () => {
+                let nav = document.getElementById('nav')
+                nav!.classList.toggle('active')
+            }
         }),
         {
             name: 'nota-multilista-storage'

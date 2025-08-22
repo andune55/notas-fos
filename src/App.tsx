@@ -1,7 +1,8 @@
 
 import VoiceToText from "./components/VoiceToText"
 import NotasModal from "./components/NotasModal"
-import ListaSelector from "./components/ListaSelector"
+
+import ConfirmDeleteModal from "./components/ConfirmDeleteModal"
 
 function App() {
    
@@ -9,9 +10,10 @@ function App() {
   return (
     <>
       {/* <TextToVoice/> */}
-       <ListaSelector />
+       
       <VoiceToText/>      
       <NotasModal/>
+      <ConfirmDeleteModal />
 
     </>
   )
