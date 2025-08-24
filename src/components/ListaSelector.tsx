@@ -16,6 +16,7 @@ export default function ListaSelector() {
         link.download = `notas_${nombre}.json`
         link.href = url
         link.click()
+        mostrarNavegacion()
     }
     const exportarTodo = () => {
         const blob = new Blob([JSON.stringify(listas, null, 2)], { type: "application/json" })
@@ -24,6 +25,7 @@ export default function ListaSelector() {
         link.download = "todas_las_listas.json"
         link.href = url
         link.click()
+        mostrarNavegacion()
     }
 
     // Importar desde JSON (una lista o todas)
@@ -49,6 +51,7 @@ export default function ListaSelector() {
                     const nombre = prompt("Nombre para la lista importada:", "Lista importada")
                     if (nombre) {
                         importarLista(nombre, data)
+                        mostrarNavegacion()
                         toast.success("Lista importada")
                     }
                 }
@@ -68,6 +71,7 @@ export default function ListaSelector() {
         const nombre = prompt("Nombre para la nueva lista:")
         if (nombre && !listas[nombre]) {
             crearLista(nombre)
+            mostrarNavegacion()
             toast.success("Lista creada")
         } else if (nombre) {
             toast.error("Ya existe una lista con ese nombre")
@@ -81,12 +85,13 @@ export default function ListaSelector() {
         }
         if (window.confirm(`¿Seguro que quieres borrar la lista "${listaActiva}"?`)) {
             eliminarLista(listaActiva)
+            mostrarNavegacion()
             toast.success("Lista eliminada")
         }
     }   
 
     return (
-        <div className="flex flex-col flex-wrap gap-2 my-2 w-full">
+        <div className="flex flex-col flex-wrap gap-2 my-2 max-sm:my-0 w-full bg-white">
             
             <div className="flex items-center">
                 <label className="font-bold mr-2">Lista:</label>
@@ -107,19 +112,19 @@ export default function ListaSelector() {
                 </div>
 
                 <div className="navEscritorio start">
-                    <button className="bg-blue-700 text-white px-2 ml-1 py-1 rounded" onClick={crearHandler}>
+                    <button className="bg-lime-600 text-white px-2 ml-1 py-1 rounded" onClick={crearHandler}>
                         Nueva
                     </button>
-                    <button className="bg-red-700 text-white px-2 ml-1 py-1 rounded" onClick={eliminarHandler}>
+                    <button className="bg-red-600 text-white px-2 ml-1 py-1 rounded" onClick={eliminarHandler}>
                         Eliminar
                     </button>
-                    <button className="bg-orange-600 text-white px-2 ml-1 py-1 rounded" onClick={() => exportarLista(listaActiva)}>
+                    <button className="bg-sky-600 text-white px-2 ml-1 py-1 rounded" onClick={() => exportarLista(listaActiva)}>
                         Exportar
                     </button>
-                    <button className="bg-orange-600 text-white px-2 ml-1 py-1 rounded" onClick={exportarTodo}>
+                    <button className="bg-sky-600 text-white px-2 ml-1 py-1 rounded" onClick={exportarTodo}>
                         Exportar todas
                     </button>
-                    <button className="bg-green-700 text-white px-2 ml-1 py-1 rounded" onClick={() => inputFileRef.current?.click()}>
+                    <button className="bg-blue-800 text-white px-2 ml-1 py-1 rounded" onClick={() => inputFileRef.current?.click()}>
                         Importar
                     </button>
                 </div>    
@@ -132,19 +137,19 @@ export default function ListaSelector() {
                         <li id="xCerrar" className='pointer text-end' onClick={mostrarNavegacion}>
                         <span className='mr-5 text-3xl text-white'>X</span>
                         </li>
-                            <li><button className="bg-blue-700 text-white px-3 py-1 rounded" onClick={crearHandler}>
+                            <li><button className="bg-lime-600 text-white px-3 px-2 ml-1 py-2 w-full mb-1.25 rounded" onClick={crearHandler}>
                                 Nueva lista
                             </button></li>
-                            <li><button className="bg-red-700 text-white px-3 py-1 rounded" onClick={eliminarHandler}>
+                            <li><button className="bg-red-600 text-white px-3 px-2 ml-1 py-2 w-full mb-1.25 rounded" onClick={eliminarHandler}>
                                 Eliminar lista
                             </button></li>
-                            <li><button className="bg-orange-600 text-white px-3 py-1 rounded" onClick={() => exportarLista(listaActiva)}>
+                            <li><button className="bg-sky-600 text-white px-3 px-2 ml-1 py-2 w-full mb-1.25 rounded" onClick={() => exportarLista(listaActiva)}>
                                 Exportar activa
                             </button></li>
-                            <li><button className="bg-orange-600 text-white px-3 py-1 rounded" onClick={exportarTodo}>
+                            <li><button className="bg-sky-600 text-white px-3 px-2 ml-1 py-2 w-full mb-1.25 rounded" onClick={exportarTodo}>
                                 Exportar todas
                             </button></li>
-                            <li><button className="bg-green-700 text-white px-3 py-1 rounded" onClick={() => inputFileRef.current?.click()}>
+                            <li><button className="bg-blue-800 text-white px-3 px-2 ml-1 py-2 w-full mb-1.25 rounded" onClick={() => inputFileRef.current?.click()}>
                                 Importar
                             </button></li>
                             <input
