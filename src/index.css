@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* inicializar la variable y evitar “saltos” en el primer render.*/
+:root { --app-header-h: 0px; }
 
 /*** SWIPE LIST OVERRIDES **/
 .swipeable-list-item__leading-actions, 
