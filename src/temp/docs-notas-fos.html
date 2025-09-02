@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es" class="notranslate" translate="no">
+<head>
+  <meta charset="UTF-8" />
+  <title>Documentación notas-fos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Prism (usa tu hoja de estilos si ya la tienes) -->
+  <link rel="stylesheet" href="prism(OSCURO-FO).css" />
+  <style>
+    /* ====== ESTILO BASE (inspirado en tu comolohacen.html) ====== */
+    body { font-family: system-ui, Arial, sans-serif; background:#1a1a1a; color:#222; margin:0 }
+    header, nav { background:#fff; border-bottom:1px solid #ddd; margin-bottom:1em }
+    header { background:#fff; margin:1em auto; padding:.2em 1em; max-width:980px; border-radius:6px }
+    .doc-section { background:#fff; margin:1em auto; padding:.2em 1em; max-width:980px; border-radius:10px }
+    .title-desplegable { font-family:Tahoma,Verdana,Segoe,sans-serif !important; font-weight:700; font-size:1.14em; color:#630; margin:0; display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none }
+    .fecha-edicion { color:#888; font-size:.95em; font-weight:normal }
+    .borde-desplegable { background:#faf9f6; border-radius:6px; padding:6px 8px; transition: box-shadow .2s }
+    .borde-desplegable[aria-expanded="true"] { box-shadow: 0 4px 18px #c1265236; }
+    .documento { margin: 6px 2px 0 2px; clear:both }
+    .doc-nav ul { list-style:none; padding:0; margin:0 0 1em 0; display:flex; flex-wrap:wrap; gap:.5em 1.5em }
+    .doc-nav a { color:#0d72b6; text-decoration:none; font-weight:bold }
+    .select-indice {
+      font-size:1.05em; padding:.5em 1.3em .5em .7em; border-radius:6px; border:1px solid #0d72b6; background:#f6fafd; color:#0d72b6; font-weight:700;
+      box-shadow: 0 2px 8px #0d72b60c; appearance:none; outline:none; min-width:270px; cursor:pointer;
+      background-image:url('data:image/svg+xml;utf8,<svg fill="none" stroke="%230d72b6" stroke-width="2" viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>');
+      background-repeat:no-repeat; background-position:right .7em center; background-size:1.3em;
+    }
+    @media (max-width: 600px) { .select-indice{ min-width:99vw } .doc-section{ padding:1em .2em; width:98vw } }
+    pre { background:#222; color:#fff; border-radius:6px; padding:1em; overflow:auto; position:relative; font-size:1em; margin-bottom:.7em }
+    .btn-copiar { position:absolute; top:.45em; right:.7em; background:#0d72b6; color:#fff; border:none; border-radius:4px; padding:.2em .7em; cursor:pointer; font-size:.9em; opacity:.85; transition:opacity .2s; z-index:2 }
+    .btn-copiar:hover{ opacity:1 }
+    .chevron { width:1.1em; height:1.1em; margin-left:.2em; transition: transform .3s }
+    .chevron.collapsed { transform:rotate(180deg) } .chevron.expanded { transform:rotate(0deg) }
+    .destacado, p code, .badge { color:#fff; text-shadow:1px 1px 1px #0008; background:#5c5edc; border-radius:4px; padding:0 6px; font-weight:700; display:inline-block }
+    .naranja{ background:#e67e22 } .rojo{ background:#e74c3c } .verde{ background:#2ecc71 } .gris{ background:#7f8c8d }
+    .flex{ display:flex } .gap-6{ gap:1.2rem } .center{ justify-content:center; align-items:center } .d-none{ display:none }
+    .mini { font-size: .92em; color: #333 }
+    /* Modal (reutilizable si pegas capturas) */
+    .modal-overlay{ display:none; position:fixed; inset:0; background:#000B; opacity:0; transition:opacity .5s; z-index:6 }
+    .modal-object{ z-index:7; position:fixed; left:0; top:50%; transform:translateY(-50%); right:0; margin:0 auto; width:100%; max-width:80%; background:#fff; border-radius:16px; padding:20px 28px; display:none; opacity:0; pointer-events:none }
+    .open.modal-overlay{ display:block; opacity:.7 }
+    .open.modal-object{ display:block; opacity:1; pointer-events:auto }
+    .modal-link-close{ background-image:url(ico_close_light_content_high.svg); width:24px; height:36px; background-repeat:no-repeat; background-position:0; position:sticky; float:right; right:0; top:0; cursor:pointer; z-index:9 }
+    #imagenModal{ width:100%; max-width:1440px }
+  </style>
+</head>
+<body>
+<header>
+  <nav class="doc-nav" aria-label="Índice">
+    <label for="indice" style="font-size:1.05em; font-weight:700; color:#0d72b6; margin-right:8px">Selecciona sección:</label>
+    <select id="indice" class="select-indice">
+      <option value="" disabled selected>...</option>
+      <option value="#resumen">Resumen app</option>
+      <option value="#estructura">Estructura del proyecto</option>
+      <option value="#crear-proyecto">Crear proyecto React (desde cero)</option>
+      <option value="#frontend-deps">Frontend: dependencias y comandos</option>
+      <option value="#estado-helpers">Estado y helpers API</option>
+      <option value="#componentes">Componentes principales</option>
+      <option value="#backend">Backend: Express + SQLite</option>
+      <option value="#endpoints">API: endpoints</option>
+      <option value="#flyio">Despliegue backend en Fly.io</option>
+      <option value="#netlify">Despliegue frontend en Netlify</option>
+      <option value="#import-export">Importar/Exportar datos</option>
+      <option value="#dnd">Drag & Drop: detalles</option>
+      <option value="#troubleshooting">Problemas comunes</option>
+      <option value="#avances">Avances de app</option>
+    </select>
+  </nav>
+</header>
+
+<!-- ========== RESUMEN ========== -->
+<section id="resumen" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="true">
+    <p class="title-desplegable" tabindex="0">
+      <span>Resumen app notas-fos <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron expanded" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:block">
+      <ul>
+        <li><strong>Frontend:</strong> React + Vite + TypeScript, Zustand para estado global, arrastre con <code>@dnd-kit</code>, componentes sencillos y accesibles.</li>
+        <li><strong>Backend:</strong> Node/Express con <code>better-sqlite3</code> para persistencia. Endpoints REST para listas, notas, reordenación y exportación/importación.</li>
+        <li><strong>Despliegue:</strong> Front en Netlify, Backend en Fly.io con volumen persistente para la base de datos SQLite.</li>
+        <li><strong>UX:</strong> Múltiples listas, import/export JSON, edición inline, drag & drop estable, y carga inicial de todas las listas (persistente al recargar).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ESTRUCTURA ========== -->
+<section id="estructura" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Estructura de carpetas <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <pre><code class="language-bash">notas-fos/
+├─ public/
+├─ src/
+│  ├─ components/
+│  ├─ helpers/
+│  ├─ store.ts
+│  ├─ types.ts
+│  └─ main.tsx
+├─ server/
+│  ├─ src/
+│  │  ├─ db.ts
+│  │  └─ index.ts
+│  ├─ Dockerfile
+│  ├─ fly.toml
+│  ├─ package.json
+│  └─ tsconfig.json
+├─ .env (frontend: VITE_API_BASE)
+├─ vite.config.ts
+└─ netlify.toml (opcional, si usas Netlify)</code></pre>
+      <p class="mini">El backend vive dentro de <code>server/</code> y se despliega aparte en Fly.io. El frontend se construye con Vite y se despliega en Netlify.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CREAR PROYECTO REACT ========== -->
+<section id="crear-proyecto" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Crear proyecto React desde cero <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <ul>
+        <li>Crear app con Vite + React + TS:
+          <pre><code class="language-bash">npm create vite@latest notas-fos -- --template react-ts
+cd notas-fos
+npm install</code></pre>
+        </li>
+        <li>Dependencias base frontend:
+          <pre><code class="language-bash">npm i zustand @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
+npm i -D eslint @types/node</code></pre>
+        </li>
+        <li>Archivo de entorno del front:
+          <pre><code class="language-bash"># .env (en la raíz del front)
+VITE_API_BASE=https://tu-backend.fly.dev</code></pre>
+        </li>
+        <li>Scripts típicos:
+          <pre><code class="language-json">{
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  }
+}</code></pre>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FRONTEND: DEPS Y COMANDOS ========== -->
+<section id="frontend-deps" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Frontend: dependencias y comandos <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <ul>
+        <li><strong>Zustand</strong> para estado y persist: <code class="destacado">npm i zustand zustand/middleware</code></li>
+        <li><strong>dnd-kit</strong> para drag & drop: <code class="destacado">npm i @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities</code></li>
+        <li><strong>TypeScript</strong> estricto recomendado; si compilas con <span class="destacado">noUnusedLocals</span>, elimina funciones no usadas para que <span class="destacado">npm run build</span> no falle.</li>
+        <li>Arranque local:
+          <pre><code class="language-bash">npm run dev  # http://localhost:5173</code></pre>
+        </li>
+      </ul>
+      <p class="mini">Asegúrate de llamar a <code>initFromServer()</code> desde <code>App</code> al montar, para cargar todas las listas del backend.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ESTADO Y HELPERS ========== -->
+<section id="estado-helpers" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Estado global (Zustand) y helpers de API <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <p>La clave de persistencia multi-lista está en <code>initFromServer</code>: carga TODAS las listas + notas y establece la lista activa sin borrar el resto.</p>
+      <pre><code class="language-ts">// src/store.ts (extracto de initFromServer)
+initFromServer: async () => {
+  try {
+    const lists = await apiGetLists();
+    if (!lists.length) return;
+
+    const pairs = await Promise.all(
+      lists.map(async (l) => {
+        const notasDTO = await apiGetNotes(l.key);
+        const notas = notasDTO.map(n => ({ id: n.id, txtNota: n.txtNota }));
+        return [l.key, notas] as const;
+      })
+    );
+
+    const listasObj = Object.fromEntries(pairs) as Record&lt;string, Nota[]&gt;;
+    const prevActiva = get().listaActiva;
+    const activa = prevActiva && listasObj[prevActiva] ? prevActiva : lists[0].key;
+
+    set({ listas: listasObj, listaActiva: activa });
+  } catch (e) {
+    console.error('initFromServer error', e);
+  }
+},</code></pre>
+
+      <p>Helpers de API (front) centralizan llamadas al backend, usando <code>VITE_API_BASE</code>:</p>
+      <pre><code class="language-ts">// src/helpers/api.ts
+const BASE = import.meta.env.VITE_API_BASE?.replace(/\/+$/,'') || '';
+
+export async function apiGetLists() {
+  const r = await fetch(`${BASE}/lists`);
+  const j = await r.json();
+  return j.lists as Array&lt;{ id:string; key:string; name:string; createdAt:string; noteCount:number }&gt;;
+}
+export async function apiCreateList(key:string, name:string) {
+  const r = await fetch(`${BASE}/lists`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ key, name }) });
+  if (!r.ok) throw new Error('create list');
+  return r.json();
+}
+export async function apiDeleteList(key:string) {
+  const r = await fetch(`${BASE}/lists/${key}`, { method:'DELETE' });
+  if (r.status !== 204) throw new Error('delete list');
+}
+export async function apiGetNotes(key:string) {
+  const r = await fetch(`${BASE}/lists/${key}/notes`);
+  const j = await r.json();
+  return j.notes as Array&lt;{ id:string; listKey:string; txtNota:string; position:number }&gt;;
+}
+export async function apiCreateNote(key:string, text:string) {
+  const r = await fetch(`${BASE}/lists/${key}/notes`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ text }) });
+  if (!r.ok) throw new Error('create note');
+  return r.json();
+}
+export async function apiUpdateNote(id:string, data:{ text?:string; position?:number; listKey?:string }) {
+  const r = await fetch(`${BASE}/notes/${id}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+  if (!r.ok) throw new Error('update note');
+  return r.json();
+}
+export async function apiDeleteNote(id:string) {
+  const r = await fetch(`${BASE}/notes/${id}`, { method:'DELETE' });
+  if (r.status !== 204) throw new Error('delete note');
+}
+export async function apiReorderNotes(key:string, order:string[]) {
+  const r = await fetch(`${BASE}/lists/${key}/notes/reorder`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ order }) });
+  if (!r.ok) throw new Error('reorder notes');
+  return r.json();
+}
+export async function apiReplaceListNotes(key:string, notes:Array&lt;{id:string; txtNota:string; position:number}&gt;) {
+  // utilidad para importar: borrar e insertar con posiciones
+  await fetch(`${BASE}/lists/${key}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ key, name:key }) }).catch(()=>{});
+  await fetch(`${BASE}/import`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ lists:[{ key, name:key, notes }] }) });
+}
+</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ========== COMPONENTES ========== -->
+<section id="componentes" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Componentes principales del front <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <ul>
+        <li><strong>NotasList.tsx:</strong> lista de notas de la <span class="destacado">lista activa</span>, soporte de arrastre con dnd-kit.</li>
+        <li><strong>NotaDetail.tsx:</strong> cada item; implementa listeners/attributes de <code>useSortable</code>. Ver compat de animaciones más abajo.</li>
+        <li><strong>Header.tsx:</strong> selector de lista, acciones de crear/eliminar/exportar/importar.</li>
+        <li><strong>VoiceToText.tsx</strong> (opcional): entrada por voz si el navegador soporta Web Speech API.</li>
+      </ul>
+      <pre><code class="language-tsx">// src/NotaDetail.tsx (extracto dnd)
+const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id, animateLayoutChanges });
+const style = { transition: transition ?? 'transform 120ms linear', transform: CSS.Transform.toString(transform) };
+return (
+  &lt;div ref={setNodeRef} style={style} {...attributes} {...listeners}&gt; ... &lt;/div&gt;
+);</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ========== BACKEND EXPRESS + SQLITE ========== -->
+<section id="backend" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Backend: Express + SQLite (better-sqlite3) <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <p>Crear carpeta <code>server/</code> y dentro inicializar Node + TS:</p>
+      <pre><code class="language-bash">cd server
+npm init -y
+npm i express cors morgan better-sqlite3
+npm i -D typescript tsx @types/express @types/cors @types/morgan @types/node @types/better-sqlite3
+npx tsc --init</code></pre>
+
+      <p><strong>tsconfig.json</strong></p>
+      <pre><code class="language-json">{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "rootDir": "src",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "lib": ["ES2022"]
+  },
+  "include": ["src"]
+}</code></pre>
+
+      <p><strong>package.json (server)</strong></p>
+      <pre><code class="language-json">{
+  "name": "notas-fos-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.6.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.10",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.11.30",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  }
+}</code></pre>
+
+      <p><strong>src/db.ts</strong></p>
+      <pre><code class="language-ts">import Database from "better-sqlite3";
+import fs from "node:fs";
+import path from "node:path";
+
+const DB_PATH = process.env.DB_PATH || path.join(process.cwd(), "data", "notes.db");
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+
+export const db = new Database(DB_PATH);
+db.pragma("journal_mode = WAL");
+db.pragma("foreign_keys = ON");
+
+db.exec(`
+CREATE TABLE IF NOT EXISTS lists (
+  id TEXT PRIMARY KEY,
+  list_key TEXT UNIQUE NOT NULL,
+  display_name TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS notes (
+  id TEXT PRIMARY KEY,
+  list_key TEXT NOT NULL REFERENCES lists(list_key) ON DELETE CASCADE,
+  text TEXT NOT NULL,
+  position INTEGER NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_notes_list_key ON notes(list_key);
+CREATE INDEX IF NOT EXISTS idx_notes_position ON notes(position);
+`);
+
+export type ListRow = { id:string; list_key:string; display_name:string; created_at:string };
+export type NoteRow = { id:string; list_key:string; text:string; position:number; created_at:string; updated_at:string };</code></pre>
+
+      <p><strong>src/index.ts</strong> (API REST)</p>
+      <pre><code class="language-ts">import express, { type Request, type Response } from "express";
+import cors from "cors";
+import morgan from "morgan";
+import { randomUUID } from "node:crypto";
+import { db, type ListRow, type NoteRow } from "./db.js";
+
+const app = express();
+const ORIGIN = process.env.ORIGIN || "*";
+const API_KEY = process.env.API_KEY || "";
+
+app.use(cors({ origin: ORIGIN === "*" ? true : ORIGIN }));
+app.use(express.json());
+app.use(morgan("dev"));
+
+// (Opcional) API key simple
+app.use((req, res, next) => {
+  if (!API_KEY) return next();
+  if (req.header("X-API-Key") === API_KEY) return next();
+  res.status(401).json({ error: "Unauthorized" });
+});
+
+app.get("/health", (_req, res) => res.json({ ok: true }));
+
+app.get("/lists", (_req, res) => {
+  const rows = db.prepare("SELECT id, list_key, display_name, created_at FROM lists ORDER BY created_at DESC").all() as ListRow[];
+  const countStmt = db.prepare("SELECT COUNT(*) as count FROM notes WHERE list_key = ?");
+  const lists = rows.map(l => {
+    const c = countStmt.get(l.list_key) as { count:number } | undefined;
+    return { id:l.id, key:l.list_key, name:l.display_name, createdAt:l.created_at, noteCount:c?.count ?? 0 };
+  });
+  res.json({ lists });
+});
+
+app.post("/lists", (req, res) => {
+  const { key, name } = req.body as { key?:string; name?:string };
+  if (!key || !name) return res.status(400).json({ error: "key and name are required" });
+  try {
+    db.prepare("INSERT INTO lists (id, list_key, display_name) VALUES (?, ?, ?)").run(randomUUID(), key, name);
+    res.status(201).json({ key, name });
+  } catch (e:any) {
+    if (e.code === "SQLITE_CONSTRAINT_UNIQUE") return res.status(409).json({ error:"List key already exists" });
+    res.status(500).json({ error:"Internal error" });
+  }
+});
+
+app.delete("/lists/:key", (req, res) => {
+  const info = db.prepare("DELETE FROM lists WHERE list_key = ?").run(req.params.key);
+  if (info.changes === 0) return res.status(404).json({ error:"Not found" });
+  res.status(204).end();
+});
+
+app.get("/lists/:key/notes", (req, res) => {
+  const rows = db.prepare(
+    "SELECT id, list_key, text, position, created_at, updated_at FROM notes WHERE list_key = ? ORDER BY position ASC, created_at ASC"
+  ).all(req.params.key) as NoteRow[];
+  const notes = rows.map(n => ({ id:n.id, listKey:n.list_key, txtNota:n.text, position:n.position, createdAt:n.created_at, updatedAt:n.updated_at }));
+  res.json({ notes });
+});
+
+app.post("/lists/:key/notes", (req, res) => {
+  const key = req.params.key;
+  const { text } = req.body as { text?:string };
+  if (!text) return res.status(400).json({ error:"text is required" });
+  const exists = db.prepare("SELECT 1 FROM lists WHERE list_key=?").get(key);
+  if (!exists) return res.status(404).json({ error:"List not found" });
+
+  const nextPos = ((db.prepare("SELECT COALESCE(MAX(position), -1) AS maxPos FROM notes WHERE list_key = ?")
+    .get(key) as { maxPos:number } | undefined)?.maxPos ?? -1) + 1;
+  const id = randomUUID();
+  db.prepare("INSERT INTO notes (id, list_key, text, position) VALUES (?, ?, ?, ?)").run(id, key, text, nextPos);
+  res.status(201).json({ id, listKey:key, txtNota:text, position:nextPos });
+});
+
+app.patch("/notes/:id", (req, res) => {
+  const id = req.params.id;
+  const { text, position, listKey } = req.body as { text?:string; position?:number; listKey?:string };
+  const note = db.prepare("SELECT * FROM notes WHERE id=?").get(id) as NoteRow | undefined;
+  if (!note) return res.status(404).json({ error:"Not found" });
+
+  const newText = text ?? note.text;
+  const newPos = position ?? note.position;
+  const newList = listKey ?? note.list_key;
+
+  const tx = db.transaction(() => {
+    if (newList !== note.list_key) db.prepare("UPDATE notes SET list_key=? WHERE id=?").run(newList, id);
+    db.prepare("UPDATE notes SET text=?, position=?, updated_at=datetime('now') WHERE id=?").run(newText, newPos, id);
+  });
+  tx();
+  res.json({ id, listKey:newList, txtNota:newText, position:newPos });
+});
+
+app.delete("/notes/:id", (req, res) => {
+  const info = db.prepare("DELETE FROM notes WHERE id=?").run(req.params.id);
+  if (info.changes === 0) return res.status(404).json({ error:"Not found" });
+  res.status(204).end();
+});
+
+app.put("/lists/:key/notes/reorder", (req, res) => {
+  const key = req.params.key;
+  const body = req.body as { order:string[] };
+  if (!Array.isArray(body.order)) return res.status(400).json({ error:"order must be an array of note ids" });
+
+  const tx = db.transaction((ids:string[]) => {
+    ids.forEach((id, idx) => db.prepare("UPDATE notes SET position=?, updated_at=datetime('now') WHERE id=? AND list_key=?").run(idx, id, key));
+  });
+  tx(body.order);
+  res.json({ ok:true });
+});
+
+app.get("/export", (_req, res) => {
+  const lists = db.prepare("SELECT * FROM lists").all() as Array&lt;{ id:string; list_key:string; display_name:string; created_at:string }&gt;;
+  const getNotes = db.prepare("SELECT * FROM notes WHERE list_key = ? ORDER BY position ASC, created_at ASC");
+  const data = lists.map(l => {
+    const notes = getNotes.all(l.list_key) as Array&lt;{ id:string; list_key:string; text:string; position:number }&gt;;
+    return { key:l.list_key, name:l.display_name, notes: notes.map((n, i) => ({ id:n.id, txtNota:n.text, position: typeof n.position==='number' ? n.position : i })) };
+  });
+  res.json({ lists:data });
+});
+
+app.post("/import", (req, res) => {
+  const payload = req.body as { lists: Array&lt;{ key:string; name:string; notes:Array&lt;{ id?:string; txtNota:string; position?:number }&gt; }&gt; };
+  if (!payload?.lists) return res.status(400).json({ error:"lists is required" });
+
+  const tx = db.transaction(() => {
+    payload.lists.forEach(l => {
+      const exists = db.prepare("SELECT 1 FROM lists WHERE list_key=?").get(l.key);
+      if (!exists) db.prepare("INSERT OR IGNORE INTO lists (id, list_key, display_name) VALUES (?, ?, ?)").run(randomUUID(), l.key, l.name || l.key);
+      else db.prepare("UPDATE lists SET display_name=? WHERE list_key=?").run(l.name || l.key, l.key);
+
+      db.prepare("DELETE FROM notes WHERE list_key=?").run(l.key);
+      l.notes.forEach((n, idx) => {
+        db.prepare("INSERT INTO notes (id, list_key, text, position) VALUES (?, ?, ?, ?)").run(n.id || randomUUID(), l.key, n.txtNota, typeof n.position==='number' ? n.position : idx);
+      });
+    });
+  });
+  tx();
+  res.json({ ok:true });
+});
+
+const PORT = process.env.PORT ? Number(process.env.PORT) : 8080;
+app.listen(PORT, () => console.log(`API running on :${PORT}`));</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ENDPOINTS ========== -->
+<section id="endpoints" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>API endpoints (resumen) <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <pre><code class="language-bash">GET    /health
+GET    /lists
+POST   /lists                     { key, name }
+DELETE /lists/:key
+GET    /lists/:key/notes
+POST   /lists/:key/notes          { text }
+PATCH  /notes/:id                 { text?, position?, listKey? }
+DELETE /notes/:id
+PUT    /lists/:key/notes/reorder  { order: string[] }
+GET    /export
+POST   /import                    { lists: [{ key, name, notes:[{id?, txtNota, position?}] }] }</code></pre>
+      <p class="mini">Si usas <span class="destacado">API_KEY</span>, envíala en <code>X-API-Key</code> en cada request.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FLY.IO ========== -->
+<section id="flyio" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Despliegue backend en Fly.io <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <p><strong>Dockerfile</strong> (compila TS y empaqueta dependencias nativas como better-sqlite3)</p>
+      <pre><code class="language-dockerfile"># server/Dockerfile
+FROM node:20-bookworm AS build
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ git \
+  && rm -rf /var/lib/apt/lists/*
+COPY package.json ./
+COPY package-lock.json ./ 2>/dev/null || true
+RUN npm ci || npm install
+COPY tsconfig.json ./
+COPY src ./src
+RUN npm run build
+
+FROM node:20-bookworm
+WORKDIR /app
+ENV NODE_ENV=production
+RUN mkdir -p /data
+ENV DB_PATH=/data/notes.db
+COPY --from=build /app/package.json /app/package.json
+COPY --from=build /app/node_modules /app/node_modules
+COPY --from=build /app/dist /app/dist
+EXPOSE 8080
+CMD ["node", "dist/index.js"]</code></pre>
+
+      <p><strong>fly.toml</strong></p>
+      <pre><code class="language-toml"># server/fly.toml
+app = "notas-fos-backend"        # cambia por el nombre de tu app
+primary_region = "cdg"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_start_machines = true
+  auto_stop_machines = true
+  min_machines_running = 0
+
+[[mounts]]
+  source = "notes_data"
+  destination = "/data"</code></pre>
+
+      <p><strong>Comandos</strong></p>
+      <pre><code class="language-bash">cd server
+flyctl launch --no-deploy   # crea app y fly.toml (o edítalo a mano)
+fly volumes create notes_data --size 1 --region cdg
+fly secrets set ORIGIN=https://notas-fos.netlify.app
+# (opcional) fly secrets set API_KEY=mi-api-key
+flyctl deploy
+fly status
+fly logs -a notas-fos-backend</code></pre>
+
+      <p class="mini">Si ves error por <span class="destacado">npm ci</span> y lock desincronizado, ejecuta <code>npm install</code> local en <code>server/</code>, commitea el <code>package-lock.json</code> y vuelve a desplegar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== NETLIFY FRONTEND ========== -->
+<section id="netlify" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Despliegue frontend en Netlify <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <ul>
+        <li>En Netlify configura variable <strong>VITE_API_BASE</strong> con la URL pública de Fly (ej: <code>https://notas-fos-backend.fly.dev</code>).</li>
+        <li>Build command: <code class="destacado">npm run build</code> — Publish directory: <code class="destacado">dist</code></li>
+        <li>Para probar local:
+          <pre><code class="language-bash">npm run build
+npx serve dist  # o vite preview</code></pre>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== IMPORT/EXPORT ========== -->
+<section id="import-export" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Importar/Exportar datos <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <ul>
+        <li><strong>Exportar todo</strong>: GET <code>/export</code> → devuelve <code>{ lists: [{ key, name, notes: [{ id, txtNota, position }] }] }</code></li>
+        <li><strong>Importar</strong>: POST <code>/import</code> con el mismo formato. El backend crea/actualiza listas y sustituye sus notas.</li>
+      </ul>
+      <pre><code class="language-json">{
+  "lists": [
+    {
+      "key": "Tareas",
+      "name": "Tareas",
+      "notes": [
+        { "id": "uuid-1", "txtNota": "Primera", "position": 0 },
+        { "id": "uuid-2", "txtNota": "Segunda", "position": 1 }
+      ]
+    }
+  ]
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ========== DND DETALLES ========== -->
+<section id="dnd" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Drag & Drop: detalles y compatibilidad <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <p>Entre versiones de <code>@dnd-kit/sortable</code> cambia la forma de los args de <code>animateLayoutChanges</code>. Usa una función "compat".</p>
+      <pre><code class="language-ts">// animateLayoutChanges (compat)
+import { defaultAnimateLayoutChanges, type AnimateLayoutChanges } from '@dnd-kit/sortable';
+type ArgsCompat = Parameters&lt;typeof defaultAnimateLayoutChanges&gt;[0] &amp; { index?:number; currentIndex?:number; active?:{ id?:string }|null; id?:string };
+
+export const animateLayoutChanges: AnimateLayoutChanges = (raw) => {
+  const args = raw as ArgsCompat;
+  const activeId = args.active?.id;
+  if (!activeId) return defaultAnimateLayoutChanges(args);
+  const currentIndex = args.currentIndex ?? args.index;
+  if (currentIndex === 0 && activeId !== args.id) return false;
+  return defaultAnimateLayoutChanges(args);
+};</code></pre>
+      <p class="mini">Si no necesitas personalización, omite <code>animateLayoutChanges</code> y usa el valor por defecto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TROUBLESHOOTING ========== -->
+<section id="troubleshooting" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Problemas comunes y soluciones <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <ul>
+        <li><strong>TS: “No se encontró declaración para 'better-sqlite3'”</strong> → instala <code class="destacado">@types/better-sqlite3</code> y <code class="destacado">@types/node</code> en <code>server/</code>. Reinicia TS Server.</li>
+        <li><strong>npm ci falla en Fly</strong> (EUSAGE, lock desincronizado) → ejecuta <code class="destacado">npm install</code> en <code>server/</code>, commitea <code>package-lock.json</code>, despliega de nuevo.</li>
+        <li><strong>Región Fly “mad” deprecada</strong> → ajusta <code>primary_region="cdg"</code>, crea volumen en esa región: <code class="destacado">fly volumes create notes_data --region cdg</code>.</li>
+        <li><strong>noUnusedLocals rompe el build</strong> → elimina funciones/imports no usados o desactívalo (no recomendado).</li>
+        <li><strong>Tras importar varias listas, al recargar solo queda una</strong> → usa el <strong>initFromServer</strong> que carga TODAS las listas (ver sección Estado).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========== AVANCES ========== -->
+<section id="avances" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Avances de la app (bitácora) <span class="fecha-edicion">[Última edición: 2025-09-02]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <ul>
+        <li><strong>2025-09-02</strong>
+          <ul>
+            <li>Store: <span class="destacado">initFromServer</span> carga TODAS las listas → persistencia real tras recargar.</li>
+            <li>Backend TS: tipos exportados (<code>ListRow</code>, <code>NoteRow</code>), prepare sin genéricos, mapeos tipados.</li>
+            <li>Fly: región primaria <span class="destacado">cdg</span>, volumen <span class="destacado">notes_data</span>, Dockerfile con toolchain para better-sqlite3.</li>
+            <li>Netlify: variable <span class="destacado">VITE_API_BASE</span> apuntando al backend.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MODAL UNIVERSAL (para mostrar imágenes si las añades con class="modal") ===== -->
+<div id="ModalPanel" class="modal-object" role="dialog" aria-modal="true" aria-labelledby="ModalPanelTitle" style="display:none;">
+  <div class="modal-link-close" title="Cerrar"></div>
+  <div id="ModalPanel-component" class="modal-content">
+    <div class="search-results">
+      <div class="flex center" style="padding:10px 0">
+        <img id="imagenModal" alt="" src="#">
+      </div>
+    </div>
+  </div>
+</div>
+<div id="ModalPanel-overlay" class="modal-overlay" style="display:none;"></div>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="prism.js"></script>
+<script>
+  // Copiar botón en cada bloque de código
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-copiar';
+      btn.type = 'button';
+      btn.textContent = 'Copiar';
+      btn.addEventListener('click', () => {
+        const code = pre.querySelector('code');
+        if (code) {
+          navigator.clipboard.writeText(code.textContent || '');
+          btn.textContent = '¡Copiado!';
+          setTimeout(() => btn.textContent = 'Copiar', 1500);
+        }
+      });
+      pre.appendChild(btn);
+    });
+  });
+
+  // Desplegables
+  $(function(){
+    $('.title-desplegable').on('click keydown', function(e){
+      if (e.type==='click' || e.key==='Enter' || e.key===' ') {
+        const $p = $(this);
+        const $box = $p.closest('.borde-desplegable');
+        const $doc = $box.find('.documento').first();
+        const $chev = $p.find('.chevron');
+        const expanded = $box.attr('aria-expanded') === 'true';
+        $doc.slideToggle(180);
+        $box.attr('aria-expanded', !expanded);
+        $chev.toggleClass('collapsed expanded');
+      }
+    });
+  });
+
+  // Índice
+  document.getElementById('indice').addEventListener('change', function(){
+    const val = this.value;
+    if (!val) return;
+    const target = document.querySelector(val);
+    if (target) {
+      target.scrollIntoView({ behavior:'smooth' });
+      history.replaceState(null, '', val);
+    }
+  });
+
+  // Modal para imágenes con class="modal"
+  $(document).on('click', 'img.modal', function(){
+    const src = this.src;
+    navigator.clipboard.writeText(src);
+    $('#imagenModal').attr('src', src);
+    $('#ModalPanel').addClass('open').show();
+    $('#ModalPanel-overlay').addClass('open').show();
+  });
+  $(document).on('click', '.modal-link-close, #ModalPanel-overlay', function(){
+    $('#ModalPanel').removeClass('open').hide();
+    $('#ModalPanel-overlay').removeClass('open').hide();
+  });
+  document.body.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      $('#ModalPanel').removeClass('open').hide();
+      $('#ModalPanel-overlay').removeClass('open').hide();
+    }
+  });
+</script>
+</body>
+</html>
