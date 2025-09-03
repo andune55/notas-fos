@@ -1,9 +1,23 @@
+
 const BASE = import.meta.env.VITE_API_BASE_URL as string
 const API_KEY = import.meta.env.VITE_API_KEY as string | undefined
+
+function getToken() {
+  try {
+    const raw = localStorage.getItem('user-store')
+    if (!raw) return null
+    const state = JSON.parse(raw).state
+    return state.token || null
+  } catch {
+    return null
+  }
+}
 
 function headers() {
   const h: Record<string, string> = { 'Content-Type': 'application/json' }
   if (API_KEY) h['X-API-Key'] = API_KEY
+  const token = getToken()
+  if (token) h['Authorization'] = 'Bearer ' + token
   return h
 }
 

@@ -1,8 +1,15 @@
+import "dotenv/config"; // <-- Carga variables de entorno
 import express, { type Request, type Response, type NextFunction } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { randomUUID } from "node:crypto";
 import { db, type ListRow, type NoteRow } from "./db.js";
+import loginRouter from "./login.js";
+import { authMiddleware } from "./auth-middleware.js";
+
+import dotenv from "dotenv";
+dotenv.config();
+
 
 const app = express();
 
@@ -26,8 +33,14 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(401).json({ error: "Unauthorized" });
 });
 
+// Endpoint de login (público)
+app.use("/auth", loginRouter);
+
 // Health
 app.get("/health", (_req: Request, res: Response) => res.json({ ok: true }));
+
+// ---- Todas las rutas protegidas: listas y notas ----
+app.use(authMiddleware);
 
 // ---- Lists ----
 app.get("/lists", (_req: Request, res: Response) => {
