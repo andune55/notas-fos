@@ -728,6 +728,132 @@ export const animateLayoutChanges: AnimateLayoutChanges = (raw) => {
   </div>
 </section>
 
+<!-- ========== LOGIN: GESTIÓN Y INTEGRACIÓN ========== -->
+<section id="login" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Login: gestión de usuarios y pasos de integración <span class="fecha-edicion">[Última edición: 2025-09-03]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <ul>
+        <li><strong>Login seguro</strong> con <span class="destacado">JWT</span>, usuarios en variable de entorno (<code>USERS_JSON</code>), hash <span class="destacado">bcrypt</span>.</li>
+        <li>El backend sólo permite acceso si el usuario existe y la contraseña es correcta.</li>
+      </ul>
+      <h4>Pasos para integrar login (backend y frontend):</h4>
+      <ol>
+        <li>
+          <strong>Instala dependencias en <code>server/</code>:</strong>
+          <pre><code class="language-bash">npm i bcryptjs jsonwebtoken
+npm i -D @types/bcryptjs @types/jsonwebtoken</code></pre>
+        </li>
+        <li>
+          <strong>Añade <code>login.ts</code> al backend:</strong>
+          <pre><code class="language-ts">// server/src/login.ts
+import { Router } from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+const router = Router();
+
+let USERS: Array<{ email: string; hash: string }> = [];
+try {
+  USERS = JSON.parse(process.env.USERS_JSON || "[]");
+} catch (e) {
+  console.error("Error parseando USERS_JSON:", e);
+}
+console.log("USERS:", USERS);
+
+router.post("/login", (req, res) => {
+  const { email, password } = req.body || {};
+  const user = USERS.find(u => u.email.trim().toLowerCase() === (email || "").trim().toLowerCase());
+  if (!user) return res.status(401).json({ error: "Usuario no existe" });
+  if (!bcrypt.compareSync(password, user.hash)) return res.status(401).json({ error: "Contraseña incorrecta" });
+
+  const token = jwt.sign(
+    { email },
+    process.env.JWT_SECRET || "supersecret",
+    { expiresIn: "8h" }
+  );
+  res.json({ token, email });
+});
+
+export default router;</code></pre>
+        </li>
+        <li>
+          <strong>Importa el router en <code>index.ts</code>:</strong>
+          <pre><code class="language-ts">// al principio
+import loginRouter from "./login.js";
+// ...
+app.use("/auth", loginRouter);</code></pre>
+        </li>
+        <li>
+          <strong>Variables de entorno obligatorias:</strong>
+          <pre><code class="language-bash">JWT_SECRET=supersecret
+# Usuarios: array JSON con email y hash bcrypt
+USERS_JSON='[{"email":"admin@admin.com","hash":"$2b$08$KXXQIJTILabUYbQxgIm8BeXggwRa.CTQi9Hw4M.5/7RI0LJDUyTvG"}]'
+</code></pre>
+          <ul>
+            <li>El <code>hash</code> debe ser generado con bcrypt (ej: <code>bcrypt.hashSync("tuPassword", 8)</code>).</li>
+            <li>En <strong>Fly.io</strong> <span class="destacado">NO uses .env local</span>: pon el secreto así (usa <strong>Git Bash</strong> o <strong>WSL</strong> si usas Windows):<br>
+            <code class="language-bash">fly secrets set USERS_JSON='[{"email":"admin@admin.com","hash":"..."}]'</code>
+            </li>
+            <li>Si el JSON está mal formado, el backend no verá usuarios (mira logs con <code>fly logs</code>).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Problemas comunes:</strong>
+          <ul>
+            <li>Si usas <span class="destacado">cmd</span> o <span class="destacado">PowerShell</span> en Windows, <strong>NO funcionará bien</strong> el comando de <code>fly secrets set</code> para arrays JSON.<br>
+              <span class="rojo">Solución:</span> Usa terminal <strong>Git Bash</strong> (instala <a href="https://git-scm.com/download/win" target="_blank">Git Bash</a>) o <strong>WSL</strong> y selecciona desde VSCode como terminal predeterminada.<br>
+              <span class="mini">En VSCode: <kbd>Ctrl+Shift+P</kbd> &rarr; <strong>Terminal: Select Default Profile</strong> &rarr; <strong>Git Bash</strong>.</span>
+            </li>
+            <li>Si sigue sin funcionar, elimina el secreto y vuelve a ponerlo:<br>
+              <code class="language-bash">fly secrets unset USERS_JSON
+fly secrets set USERS_JSON='[{"email":"admin@admin.com","hash":"..."}]'</code>
+            </li>
+            <li>Tras cambiar secretos, <span class="destacado">reincia el backend</span>: <code class="language-bash">fly restart</code></li>
+            <li>Para ver si se cargó bien: <br>
+              <code class="language-bash">fly logs</code>
+              <br>Busca <code>USERS: [...]</code> en el log (debe aparecer el array con tus usuarios).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Frontend: componente login</strong>
+          <ul>
+            <li>Envía <code>POST /auth/login</code> con <code>{ email, password }</code>.</li>
+            <li>Si el login es correcto, recibe <code>{ token, email }</code> y guarda el token en estado global (ej: Zustand).</li>
+            <li>Si el login falla, muestra mensaje de error (<span class="rojo">Usuario no existe</span> o <span class="rojo">Contraseña incorrecta</span>).</li>
+            <li>Ejemplo de integración visual con <strong>TailwindCSS</strong>:
+              <pre><code class="language-tsx">{/* extracto del login moderno */}
+<div className="min-h-screen flex items-center justify-center bg-blue-200 bg-[url('https://www.toptal.com/designers/subtlepatterns/patterns/symphony.png')]">
+  <div className="bg-white rounded-2xl shadow-xl px-8 py-8 w-full max-w-md flex flex-col items-center">
+    {/* ...icono, título, form... */}
+    <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
+      <input type="email" ... className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-400" />
+      {/* ...input password... */}
+      <button className="w-full py-2 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition">Entrar</button>
+      {error && <div className="text-red-600 text-center mt-2">{error}</div>}
+    </form>
+  </div>
+</div>
+</code></pre>
+            </li>
+          </ul>
+        </li>
+      </ol>
+      <h4>Resumen de tips y buenas prácticas</h4>
+      <ul>
+        <li>Siempre usa <span class="destacado">Git Bash</span> o <span class="destacado">WSL</span> para comandos con JSON en Fly.io.</li>
+        <li>Reinicia el backend tras cambiar <code>USERS_JSON</code> o <code>JWT_SECRET</code>.</li>
+        <li>Comprueba los logs para asegurar que los usuarios se cargan correctamente.</li>
+        <li>En el frontend, muestra mensajes claros de error y bloquea acceso si no hay token de login.</li>
+      </ul>
+      <p class="mini">Con estos pasos tienes login seguro y gestionable en tu app, con integración backend/frontend y despliegue robusto en Fly.io.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ===== MODAL UNIVERSAL (para mostrar imágenes si las añades con class="modal") ===== -->
 <div id="ModalPanel" class="modal-object" role="dialog" aria-modal="true" aria-labelledby="ModalPanelTitle" style="display:none;">
   <div class="modal-link-close" title="Cerrar"></div>
