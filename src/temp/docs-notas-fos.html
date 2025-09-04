@@ -64,6 +64,8 @@
       <option value="#dnd">Drag & Drop: detalles</option>
       <option value="#troubleshooting">Problemas comunes</option>
       <option value="#avances">Avances de app</option>
+      <option value="#login">Gestion de usuarios</option>
+      <option value="#pull-request-git">Ventajas pull request</option>
     </select>
   </nav>
 </header>
@@ -850,6 +852,82 @@ fly secrets set USERS_JSON='[{"email":"admin@admin.com","hash":"..."}]'</code>
         <li>En el frontend, muestra mensajes claros de error y bloquea acceso si no hay token de login.</li>
       </ul>
       <p class="mini">Con estos pasos tienes login seguro y gestionable en tu app, con integración backend/frontend y despliegue robusto en Fly.io.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTROL DE VERSIONES: FLUJO MEJORADO CON PULL REQUESTS ========== -->
+<section id="pull-request-git" class="doc-section" tabindex="-1">
+  <div class="borde-desplegable" aria-expanded="false">
+    <p class="title-desplegable" tabindex="0">
+      <span>Control de versiones: ventajas y uso de Pull Requests <span class="fecha-edicion">[Última edición: 2025-09-04]</span></span>
+      <svg class="chevron collapsed" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/></svg>
+    </p>
+    <div class="documento" style="display:none">
+      <h4>¿Qué es un Pull Request y por qué usarlo?</h4>
+      <ul>
+        <li><strong>Pull Request (PR):</strong> Solicitud para fusionar cambios de una rama a otra (normalmente a <span class="destacado">main</span>).</li>
+        <li>Permite <strong>trabajar en ramas</strong> separadas, probar y revisar cambios antes de unirlos a la rama principal.</li>
+        <li>Ideal <strong>aunque trabajes solo</strong>: deja registro de cada avance, revisas antes de unir, y mantienes <span class="destacado">main</span> siempre funcional.</li>
+        <li>Documenta las funcionalidades: cada PR puede tener descripción, imágenes, y queda como histórico.</li>
+      </ul>
+      <h4>Ventajas respecto al flujo básico (commit/push directo a main):</h4>
+      <ul>
+        <li><span class="verde">Historial limpio:</span> cada funcionalidad/grupo de cambios queda registrada y documentada.</li>
+        <li><span class="verde">Evita errores:</span> si algo no funciona, no rompes <span class="destacado">main</span>.</li>
+        <li><span class="verde">Revisión previa:</span> puedes ver el diff y asegurarte antes de fusionar.</li>
+        <li><span class="verde">Automatización:</span> puedes configurar despliegues automáticos sólo cuando se mergea a <span class="destacado">main</span>.</li>
+      </ul>
+      <h4>Flujo de trabajo recomendado paso a paso</h4>
+      <ol>
+        <li><strong>Actualiza main antes de empezar:</strong><br>
+          <pre><code class="language-bash">git checkout main
+git pull</code></pre>
+        </li>
+        <li><strong>Crea una rama nueva para cada tarea o funcionalidad:</strong><br>
+          <pre><code class="language-bash">git checkout -b nombre-rama-nueva</code></pre>
+          <span class="mini">Ejemplo: <code>git checkout -b login-feature</code></span>
+        </li>
+        <li><strong>Trabaja en esa rama, haz commits y push normalmente:</strong><br>
+          <pre><code class="language-bash">git add .
+git commit -m "Login funcional con JWT"
+git push origin login-feature</code></pre>
+        </li>
+        <li><strong>Abre un Pull Request en GitHub:</strong>
+          <ul>
+            <li>Ve al repositorio en GitHub.</li>
+            <li>Te saldrá la rama recién subida ("Compare & pull request"). Haz clic y crea el PR.</li>
+            <li>Añade descripción y revisa los cambios (diff).</li>
+          </ul>
+        </li>
+        <li><strong>Haz el merge a main (desde la web):</strong>
+          <ul>
+            <li>En el PR, haz clic en "Merge pull request".</li>
+            <li>Ahora los cambios están en <span class="destacado">main</span>.</li>
+          </ul>
+        </li>
+        <li><strong>En tus PCs, actualiza main:</strong><br>
+          <pre><code class="language-bash">git checkout main
+git pull</code></pre>
+        </li>
+      </ol>
+      <h4>¿Y si tienes ramas distintas en diferentes PCs?</h4>
+      <ul>
+        <li>Para tener los cambios de <span class="destacado">main</span> en ambos PCs, haz merge en GitHub y luego <code>git pull</code> en ambos.</li>
+        <li>Si quieres trabajar en otra rama en otro PC:<br>
+          <pre><code class="language-bash">git fetch
+git checkout nombre-rama
+git pull</code></pre>
+        </li>
+      </ul>
+      <h4>Resumen de ventajas para tu proyecto</h4>
+      <ul>
+        <li><span class="verde">No rompes main</span> si experimentas.</li>
+        <li>El historial de cambios en GitHub es más claro y documentado.</li>
+        <li>Si un cambio grande sale mal, puedes cancelar el PR y no afecta a <span class="destacado">main</span>.</li>
+        <li>Puedes tener ramas para pruebas, rediseños, migraciones, etc. y decidir cuándo unirlas.</li>
+      </ul>
+      <p class="mini">¿Quieres guía visual paso a paso, ayuda para tu primer PR, o configurar despliegue automático solo tras merge a main? ¡Pídelo y te ayudo!</p>
     </div>
   </div>
 </section>
