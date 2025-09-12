@@ -106,7 +106,7 @@ export default function ListaSelector() {
         <div className="flex items-center max-md:flex-1">
           <label className="font-bold mr-2">Lista:</label>
           <select
-            className="border px-2 py-1 rounded max-md:w-full"
+            className="border px-2 py-1 rounded max-md:w-full h-[32px] max-md:h-[46px]"
             value={listaActiva}
             onChange={e => cambiarListaActiva(e.target.value)}
           >
