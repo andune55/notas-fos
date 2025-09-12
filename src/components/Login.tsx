@@ -19,6 +19,8 @@ export default function Login() {
       })
       const data = await res.json()
       if (res.ok) {
+        // Antes de setear el usuario, limpio la caché de notas
+        localStorage.removeItem('nota-remote-cache')
         login(data.token, data.usuario)
       } else {
         setError(data.error || data.message || "Login incorrecto")

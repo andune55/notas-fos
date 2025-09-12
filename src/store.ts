@@ -12,6 +12,7 @@ import {
   apiReorderNotes,
   apiReplaceListNotes
 } from './helpers/api'
+import { useUserStore } from './storeUser'
 
 type NotasPorLista = {
   [nombreLista: string]: Nota[]
@@ -249,7 +250,24 @@ export const useNotaStore = create<NotaState>()(
         }
       }),
       {
-        name: 'nota-remote-cache'
+        name: '', // No usar valor fijo para que Zustand no mezcle entre usuarios
+        storage: {
+        getItem: (_name: string) => {
+          const usuario = useUserStore.getState().usuario
+          const raw = localStorage.getItem(`nota-remote-cache-${usuario || 'anon'}`)
+          // Zustand espera un string o null; si es string, debe ser JSON.stringify({ state, version })
+          return raw ? JSON.parse(raw) : null
+        },
+        setItem: (_name: string, value: any) => {
+          const usuario = useUserStore.getState().usuario
+          // Zustand le pasa un string (ya serializado)
+          localStorage.setItem(`nota-remote-cache-${usuario || 'anon'}`, typeof value === "string" ? value : JSON.stringify(value))
+        },
+        removeItem: (_name: string) => {
+          const usuario = useUserStore.getState().usuario
+          localStorage.removeItem(`nota-remote-cache-${usuario || 'anon'}`)
+        }
+      }
       }
     )
   )
