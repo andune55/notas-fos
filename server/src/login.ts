@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const router = Router();
 
-let USERS: Array<{ email: string; hash: string }> = [];
+let USERS: Array<{ usuario: string; hash: string }> = [];
 try {
   USERS = JSON.parse(process.env.USERS_JSON || "[]");
 } catch (e) {
@@ -13,19 +13,19 @@ try {
 console.log("USERS:", USERS);
 
 router.post("/login", (req, res) => {
-  const { email, password } = req.body || {};
-  console.log("Recibido email:", email);
-console.log("Usuarios disponibles:", USERS.map(u => u.email));
-  const user = USERS.find(u => u.email === email);
+  const { usuario, password } = req.body || {};
+  console.log("Recibido usuario:", usuario);
+  console.log("Usuarios disponibles:", USERS.map(u => u.usuario));
+  const user = USERS.find(u => u.usuario === usuario);
   if (!user) return res.status(401).json({ error: "Usuario no existe" });
   if (!bcrypt.compareSync(password, user.hash)) return res.status(401).json({ error: "Contraseña incorrecta" });
 
   const token = jwt.sign(
-    { email },
+    { usuario },
     process.env.JWT_SECRET || "supersecret",
     { expiresIn: "8h" }
   );
-  res.json({ token, email });
+  res.json({ token, usuario });
 });
 
 export default router;

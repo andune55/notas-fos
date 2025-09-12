@@ -3,7 +3,7 @@ import { useUserStore } from "../storeUser"
 
 export default function Login() {
   const login = useUserStore(s => s.login)
-  const [email, setEmail] = useState("")
+  const [usuario, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [showPass, setShowPass] = useState(false)
@@ -15,11 +15,11 @@ export default function Login() {
       const res = await fetch(import.meta.env.VITE_API_BASE_URL + "/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ usuario, password }),
       })
       const data = await res.json()
       if (res.ok) {
-        login(data.token, data.email)
+        login(data.token, data.usuario)
       } else {
         setError(data.error || data.message || "Login incorrecto")
       }
@@ -34,7 +34,7 @@ export default function Login() {
         {/* Icono/Logo */}
         <div className="mb-2 flex flex-col items-center">
           <div className="w-12 h-12 rounded-full bg-blue-800 flex items-center justify-center mb-2">
-            {/* Icono de email */}
+            {/* Icono de usuario */}
             <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
   <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.252 2.252 0 013.182 3.182l-9.78 9.78a2 2 0 01-.83.48l-3.02.806a.5.5 0 01-.606-.606l.805-3.02a2 2 0 01.48-.83l9.769-9.782z"/>
   <path strokeLinecap="round" strokeLinejoin="round" d="M15 6l3 3"/>
@@ -48,9 +48,9 @@ export default function Login() {
 
         <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
+            type="text"
+            placeholder="usuario"
+            value={usuario}
             onChange={e => setEmail(e.target.value)}
             required
             autoFocus
