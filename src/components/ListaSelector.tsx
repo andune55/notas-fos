@@ -102,16 +102,19 @@ export default function ListaSelector() {
   return (
     <div className="flex flex-col flex-wrap gap-2 my-2 max-sm:my-0 w-full bg-white">
       <div className="flex items-center">
-        <label className="font-bold mr-2">Lista:</label>
-        <select
-          className="border px-2 py-1 rounded"
-          value={listaActiva}
-          onChange={e => cambiarListaActiva(e.target.value)}
-        >
-          {Object.keys(listas).map(nombre => (
-            <option key={nombre} value={nombre}>{nombre}</option>
-          ))}
-        </select>
+        
+        <div className="flex items-center max-md:flex-1">
+          <label className="font-bold mr-2">Lista:</label>
+          <select
+            className="border px-2 py-1 rounded max-md:w-full"
+            value={listaActiva}
+            onChange={e => cambiarListaActiva(e.target.value)}
+          >
+            {Object.keys(listas).map(nombre => (
+              <option key={nombre} value={nombre}>{nombre}</option>
+            ))}
+          </select>
+        </div>
 
         <input id='show0' type='checkbox' />
         <div className='menu-button-container ml-2' id='show-menu' onClick={mostrarNavegacion}>

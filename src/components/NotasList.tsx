@@ -54,7 +54,7 @@ export default function NotasList() {
   const activeNota = posicionNotas.find(nota => nota.id === activeId)
 
   return (
-    <div className="z-4 w-[98%] max-w-[1440px] max-sm:w-full mx-auto py-5 mt-0 max-sm:pt-[320px] max-md:pt-[250px]">
+    <div className="z-4 w-[98%] max-w-[1440px] max-sm:w-full mx-auto py-5 mt-0 max-sm:pt-[295px] max-md:pt-[250px]">
       <p className="mb-3.5 text-gray-600 text-xl font-bold text-center">
         {isEmpty ? 'Graba alguna nota' : 'Listado de notas'}
       </p>

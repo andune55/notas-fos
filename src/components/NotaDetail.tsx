@@ -44,11 +44,11 @@ export default function NotaDetail({ nota, id, isOverlay }: NotaDetailsProps) {
   if (isOverlay) {
     return (
       <div
-        className="bg-white rounded-lg shadow-xl p-3 flex items-center justify-between gap-1 opacity-90 pointer-events-none"
+        className="bg-white rounded-lg shadow-xl p-2 flex items-center justify-between gap-1 opacity-90 pointer-events-none"
         style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.25)' }}
       >
-        <div className="flex gap-2 items-center">
-          <div className="mr-1 cursor-grab">
+        <div className="flex gap-2 items-center max-sm:gap-1.5">
+          <div className="mr-1 cursor-grab max-sm:mr-1.5">
             <svg className="size-10 w-8" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <path d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M22,20v-2h-4v4h2l-4,4   l-4-4h2v-4h-4v2l-4-4l4-4v2h4v-4h-2l4-4l4,4h-2v4h4v-2l4,4L22,20z" style={{ fill: "#999999" }} />
             </svg>
@@ -81,13 +81,13 @@ export default function NotaDetail({ nota, id, isOverlay }: NotaDetailsProps) {
     <div
       style={style}
       ref={setNodeRef}
-      className="bg-white rounded-lg shadow p-3 flex items-center justify-between gap-1"
+      className="bg-white rounded-lg shadow p-1.5 flex items-center justify-between gap-1"
     >
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center max-sm:gap-1.5">
         <div
           {...attributes}
           {...listeners}
-          className="mr-1 cursor-grab active:cursor-grabbing"
+          className="mr-1 cursor-grab active:cursor-grabbing max-sm:mr-1.5"
           title="Arrastra para reordenar"
         >
           <svg
